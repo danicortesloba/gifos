@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gifos</title>
+    <link rel="stylesheet"  type="text/css" href="styles/dist/stylesheet.css">
+</head>
+<body>
+    <header class="header">
+        <img src="images/logo-mobile.svg"  class="logo" alt="logo"/>
+        <input class="menu-btn" type="checkbox" id="menu-btn" />
+        <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
+        <nav class="menu">
+            <ul class="menu-ul">
+                <li><a href="#nocturno">Modo Nocturno</a></li>
+                <li><a href="#favoritos">Favoritos</a></li>
+                <li><a href="#misgifos">Mis Gifos</a></li>
+                <img src="images/button-crear-gifo.svg" alt="Create Gifo" class="crear" id="crear" onmouseover="hoverCreate()" onmouseout="offCreate()"/>
+
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="search-section">
+            <h1>Inspírate, busca, guarda y crea los mejores <span class="gifos">GIFOS</span></h1>
+            <figure>
+                <img src="images/ilustra_header.svg" class="illustration" alt="People" />
+            </figure>
+            <p><label><input type="text" name="search" id="searchInput" class="search" onkeyup="search()" placeholder="Busca GIFOs y más"></label></p>
+            <div class="search-area" id="search-area">
+                <p class="trending-topics-header">Trending:</p>
+                <p class="trending-topics">Reactions, Entertainment, Sports,Stickers, Artists</p>
+                <div id="search-results" class="search-results"></div>
+            </div>
+
+        </div>
+        <div class="trending" id="trending">
+            <p class="trending-gifs-header">Trending GIFOs</p>
+            <p class="trending-gifs-text">Mira los últimos GIFOS de nuestra comunidad</p>
+            <div class="trending-wrapper">
+                <img src="images/button-slider-left.svg" onclick="carrouselLeft()" onmouseover="leftHover()" onmouseout="leftOff()" id="left" class="left" />
+                <div id="trending-carrousel" class="trending-carrousel"></div>
+                <img src="images/button-slider-right.svg" id="right" class="right" onclick="carrouselRight()" onmouseover="rightHover()" onmouseout="rightOff()"/>
+            </div>
+            
+        </div>
+    </main>
+    <script src="scripts/script.js"></script>
+</body>
+</html>
