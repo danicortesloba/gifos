@@ -27,11 +27,13 @@
             <figure>
                 <img src="images/ilustra_header.svg" class="illustration" alt="People" />
             </figure>
-            <p><label><input type="text" name="search" id="searchInput" class="search" onkeyup="search()" placeholder="Busca GIFOs y más"></label></p>
+            <p><label><input type="text" name="search" id="searchInput" class="search" onkeyup="searchSuggestions()" placeholder="Busca GIFOs y más"></label></p>
+            <div id="search-suggestions" class="search-suggestions"></div>
             <div class="search-area" id="search-area">
-                <p class="trending-topics-header">Trending:</p>
-                <p class="trending-topics">Reactions, Entertainment, Sports,Stickers, Artists</p>
+                <p class="trending-topics-header" id="trending-topics-header">Trending:</p>
+                <p class="trending-topics" id="trending-topics">Reactions, Entertainment, Sports,Stickers, Artists</p>
                 <div id="search-results" class="search-results"></div>
+                <div class="see-more-area" id="see-more-area"></div>
             </div>
 
         </div>
@@ -40,12 +42,26 @@
             <p class="trending-gifs-text">Mira los últimos GIFOS de nuestra comunidad</p>
             <div class="trending-wrapper">
                 <img src="images/button-slider-left.svg" onclick="carrouselLeft()" onmouseover="leftHover()" onmouseout="leftOff()" id="left" class="left" />
-                <div id="trending-carrousel" class="trending-carrousel"></div>
-                <img src="images/button-slider-right.svg" id="right" class="right" onclick="carrouselRight()" onmouseover="rightHover()" onmouseout="rightOff()"/>
+                <div id="trending-carrousel" class="trending-carrousel">
+                </div>
             </div>
-            
+                <img src="images/button-slider-right.svg" id="right" class="right" onclick="carrouselRight()" onmouseover="rightHover()" onmouseout="rightOff()"/>
+            </div>    
         </div>
     </main>
+    <footer>
+        <div class="redes">
+            <p>Compartir en:</p>
+            <div class="redes-icons">
+                <a href="http://www.facebook.com"><img src= "images/icon_facebook.svg" class="facebook" id="facebook"></a> 
+                <a href="http://www.twitter.com"><img src= "images/icon-twitter.svg" class="twitter" id="twitter"></a> 
+                <a href="http://www.instagram.com"><img src= "images/icon_instagram.svg" class="instagram" id="instagram"></a> 
+            </div>   
+        </div>
+        <div class="copyright">
+            <p> Gifos 2020 All Rights Reserved</p>
+        </div>
+    </footer>
     <script src="scripts/script.js"></script>
 </body>
 </html>

@@ -139,9 +139,9 @@ h1{
     width: 300px;
     border-radius: 15px;
     border: 1px $primary solid;
-    height: 50px;
-    
+    height: 50px;    
 }
+
 
 .trending-topics-header {
   color: $primary;
@@ -165,6 +165,8 @@ h1{
   background-color: #F3F5F8;
   height: 430px;
   width: 100%;
+  position: relative;
+  z-index: 0;
 }
 
 .trending-gifs-header {
@@ -186,41 +188,191 @@ h1{
   margin-top: 10px;
 }
 
+.trending-carrousel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  
+}
+
+
 .trending-gif{
+  background-color: $primary;
   width: 243px;
   height: 187px;
   align-self: center;
   margin-top:40px;
+  z-index: 0;
+  position:relative;
 }
 
 .trending-gif:hover {
   background-color: $primary;
   opacity: 0.3;
   z-index: -1;
+  position: relative;
 } 
 
-.trending-carrousel {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+.trending-div {
+  position: relative;
+  z-index: 0;
 }
+
+.favourite{
+  z-index:5;
+  position: relative;
+}
+
+.download{
+  z-index:15;
+  position: relative;
+}
+
+.max{
+  z-index:25;
+  position: relative;
+}
+
+
+.popup {
+  text-align: center;
+  width: 100%;
+  background: white;
+  padding: 20px;
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.popup-wrapper{
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: none;
+}
+
+.pop-up-image{
+  width: 50%;
+}
+
 
 .trending-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+ 
 }
 
 .searched-gif {
-width: 260px;
-height: 200px;
+width: 156px;
+height: 120px;
+align-self: center;
+position: relative;
+z-index: 0;
 }
 
 .search-results {
   display: grid;
-  grid-template-columns: repeat(4, [col] auto);
-  grid-template-rows: repeat(3, [row] auto);
+  grid-template-columns: repeat(2, [col] auto);
+  grid-template-rows: repeat(6, [row] auto);
+  justify-content: space-around;
+  align-content: space-around;
+}
 
+.search-suggestions {
+  color: #9CAFC3;
+  font-family: 'Roboto';
+  text-align: left;
+  width: 300px;
+  margin-left: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.topic {
+margin-bottom: 20px 
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.no-results-title {
+font-family: "Montserrat";
+color: $primary;
+font-weight: bold;
+margin-bottom: 10px;
+font-size: 30px;
+}
+
+.no-results-text {
+font-family: "Montserrat";
+font-weight: bold;
+color: $secondary;
+font-size: 22px;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.redes {
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto";
+  font-size: 13px;
+  margin-left: 30px;
+  margin-top: 10px;
+}
+
+.redes-icons {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.facebook {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.twitter {
+  margin-left: 10px;
+  margin-right: 10px
+}
+
+.instagram {
+  margin-left: 10px;
+}
+
+.copyright {
+  font-family: "Roboto";
+  font-size: 13px;
+  margin-right: 30px;
+}
+
+.see-more-area {
+  width: 100%;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  align-self: center;
 }
 
   @media (min-width: 835px) {
@@ -257,7 +409,36 @@ height: 200px;
         width: 500px;
     }
 
-   
+    .search-results {
+      display: grid;
+      grid-template-columns: repeat(4, [col] auto);
+      grid-template-rows: repeat(3, [row] auto);
+    
+    }
+    .searched-gif {
+      width: 260px;
+      height: 200px;
+      }
+
+      .search-suggestions {
+        width: 500px
+      }
+
+      footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .redes {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .redes-icons {
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
 
 }
 @media (min-width: 1152px){
