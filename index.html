@@ -8,46 +8,88 @@
 </head>
 <body>
     <header class="header">
-        <img src="images/logo-mobile.svg"  class="logo" alt="logo"/>
+        <img src="images/logo-mobile.svg"  class="logo" alt="logo" onclick="showHome()"/>
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
         <nav class="menu">
             <ul class="menu-ul">
                 <li><a href="#nocturno">Modo Nocturno</a></li>
-                <li><a href="#favoritos">Favoritos</a></li>
+                <li><a href="#favoritos" id="favoritos-link" onclick="renderFavourites()">Favoritos</a></li>
                 <li><a href="#misgifos">Mis Gifos</a></li>
-                <img src="images/button-crear-gifo.svg" alt="Create Gifo" class="crear" id="crear" onmouseover="hoverCreate()" onmouseout="offCreate()"/>
+                <img src="images/button-crear-gifo.svg" alt="Create Gifo" class="crear" id="crear" onmouseover="hoverCreate()" onmouseout="offCreate()" onclick="crearGifo()"/>
 
             </ul>
         </nav>
     </header>
     <main>
-        <div class="search-section">
+        <div class="search-section" id="search-section">
             <h1>Inspírate, busca, guarda y crea los mejores <span class="gifos">GIFOS</span></h1>
             <figure>
                 <img src="images/ilustra_header.svg" class="illustration" alt="People" />
             </figure>
-            <p><label><input type="text" name="search" id="searchInput" class="search" onkeyup="searchSuggestions()" placeholder="Busca GIFOs y más"></label></p>
+            <p><label><input type="text" name="search" id="searchInput" class="search" onkeyup="getSearchSuggestions()" placeholder="Busca GIFOs y más"></label></p>
             <div id="search-suggestions" class="search-suggestions"></div>
             <div class="search-area" id="search-area">
                 <p class="trending-topics-header" id="trending-topics-header">Trending:</p>
-                <p class="trending-topics" id="trending-topics">Reactions, Entertainment, Sports,Stickers, Artists</p>
+                <p class="trending-topics" id="trending-topics"></p>
                 <div id="search-results" class="search-results"></div>
                 <div class="see-more-area" id="see-more-area"></div>
             </div>
-
+        </div>
+        <div class="favorites-section" id="favorites-section">
+            <img src = "images/icon-favoritos.svg" id="fav-green" class="fav-green"/>
+            <p id="favoritos-title" class="favoritos-title">Favoritos</p>
+            <div class="favourites-carrousel" id="favourites-carrousel"></div>
+            <div class="empty-fav" id="empty-fav"></div>
+        </div>
+        <div class="crear-gifos" id="crear-gifos">
+            <div class="crear-gifos1">
+                <div class="camara">
+                    <img src="images/camara.svg" alt="camara"/>
+                    <img src="images/element-luz-camara.svg" alt="luz camara"/>
+                </div>
+                <div class="cuadrado-pantalla">
+                    <div class="textos-pantalla" id="textos-pantalla">
+                        <p class="paso-cero-heading"> Aquí podrás crear tus propios <span class="paso-cero-word">GIFOS</span></p>
+                        <p class="paso-cero-text">¡Crea tu Gifo en sólo tres pasos!</p>
+                        <p class="paso-cero-text">(sólo necesitas una cámara para grabar un video</p>
+                    </div>
+                    <div class="textos-pantalla-2" id="textos-pantalla-2">
+                        <p class="paso-cero-heading">¿Nos das acceso a tu cámara?</p>
+                        <p class="paso-cero-text">El acceso a tu cámara será válido sólo por el tiempo en el que estés creando el GIFO</p>
+                    </div>
+                    <div class="container-pantalla">
+                        <video class="pantalla" id="pantalla"></video>
+                    </div>
+                    
+                </div>
+                <img src="images/pelicula.svg" alt="cinta" class="cinta"/>
+            </div>
+            <div class="crear-gifos2" id="crear-gifos2">
+                <div class="numeros">
+                    <img src="images/paso-a-paso1.svg" class="uno" alt="uno" id="uno"/>
+                    <img src="images/paso-a-paso2.svg" class="dos" alt="dos" id="dos"/>
+                    <img src="images/paso-a-paso3.svg" class="tres" alt="tres" id="tres"/>
+                </div>
+                <div class="linea" id="linea"></div>
+                <button class="boton-crear" id="boton-crear">COMENZAR</button>
+                <button class="boton-crear" id="boton-grabar">GRABAR</button>
+                <button class="boton-crear" id="boton-finalizar">FINALIZAR</button>
+                <button class="boton-crear" id="boton-subir">SUBIR GIFO</button>
+            </div>
+            
+            
         </div>
         <div class="trending" id="trending">
             <p class="trending-gifs-header">Trending GIFOs</p>
             <p class="trending-gifs-text">Mira los últimos GIFOS de nuestra comunidad</p>
             <div class="trending-wrapper">
                 <img src="images/button-slider-left.svg" onclick="carrouselLeft()" onmouseover="leftHover()" onmouseout="leftOff()" id="left" class="left" />
-                <div id="trending-carrousel" class="trending-carrousel">
-                </div>
-            </div>
+                <div id="trending-carrousel" class="trending-carrousel"></div>
                 <img src="images/button-slider-right.svg" id="right" class="right" onclick="carrouselRight()" onmouseover="rightHover()" onmouseout="rightOff()"/>
             </div>    
         </div>
+       
     </main>
     <footer>
         <div class="redes">
