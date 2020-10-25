@@ -2,6 +2,8 @@ const apiKey= "vWxLs91pSMGABQsCprkgIF3EsXy3WnZA"
 let offset = 0;
 let counter = 12;
 let popId = 1;
+let stream
+let recorder
 
 const seemoreArea = document.getElementById('see-more-area')
 seemoreArea.innerHTML = ""
@@ -363,16 +365,21 @@ const pasoUno = () => {
     botonComenzar.style.display="none"
     const screenTexts2 = document.getElementById("textos-pantalla-2")
     screenTexts2.style.display="flex"
-    const videoPromise = navigator.mediaDevices.getUserMedia({
+    stream = navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
            height: { max: 450 }
         }
      })
-     .then(stream => pasoDos(stream))
-}
+     .then(function(stream) {
+        const screen = document.getElementById("pantalla")
+        screen.srcObject = stream
+        screen.play()
+     })
 
-const pasoDos = (stream) =>{
+     .then(pasoDos()) 
+}
+const pasoDos = () =>{
     const botonGrabar = document.getElementById("boton-grabar")
     botonGrabar.style.display="block"
     const uno = document.getElementById("uno")
@@ -380,13 +387,15 @@ const pasoDos = (stream) =>{
     const dos = document.getElementById("dos")
     dos.src="images/paso-a-paso-hover2.svg"
     const screenTexts2 = document.getElementById("textos-pantalla-2")
-    screenTexts2.style.display="block"
+    screenTexts2.style.display="none"
     const screen = document.getElementById("pantalla")
     screen.style.display="block"
-    botonGrabar.addEventListener("click",() => grabar(stream))
+    botonGrabar.addEventListener("click",() => grabar())
 }
 
-const grabar = (stream) => {
+const grabar = () => {
+    console.log(stream.then())
+    const test = stream.then()
     const screenTexts2 = document.getElementById("textos-pantalla-2")
     screenTexts2.style.display="none"
     const botonGrabar = document.getElementById("boton-grabar")
@@ -395,8 +404,18 @@ const grabar = (stream) => {
     botonFinalizar.style.display="block"
     botonFinalizar.addEventListener("click", () => finalizar())
     const screen = document.getElementById("pantalla")
-    screen.srcObject = stream
-    screen.play()
+    
+    // recorder = RecordRTC(stream, {
+    //     type: 'gif',
+    //     frameRate: 1,
+    //     quality: 10,
+    //     width: 360,
+    //     hidden: 240,
+    //     onGifRecordingStarted: function() {
+    //      console.log('started')
+    //    },
+    //   });
+    //   recorder.startRecording()    
 }
 
 const finalizar = () => {

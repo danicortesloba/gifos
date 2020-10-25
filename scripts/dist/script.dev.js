@@ -4,6 +4,8 @@ var apiKey = "vWxLs91pSMGABQsCprkgIF3EsXy3WnZA";
 var offset = 0;
 var counter = 12;
 var popId = 1;
+var stream;
+var recorder;
 var seemoreArea = document.getElementById('see-more-area');
 seemoreArea.innerHTML = "";
 var createGifoSection = document.getElementById("crear-gifos");
@@ -434,7 +436,7 @@ var pasoUno = function pasoUno() {
   botonComenzar.style.display = "none";
   var screenTexts2 = document.getElementById("textos-pantalla-2");
   screenTexts2.style.display = "flex";
-  var videoPromise = navigator.mediaDevices.getUserMedia({
+  stream = navigator.mediaDevices.getUserMedia({
     audio: false,
     video: {
       height: {
@@ -442,11 +444,13 @@ var pasoUno = function pasoUno() {
       }
     }
   }).then(function (stream) {
-    return pasoDos(stream);
-  });
+    var screen = document.getElementById("pantalla");
+    screen.srcObject = stream;
+    screen.play();
+  }).then(pasoDos());
 };
 
-var pasoDos = function pasoDos(stream) {
+var pasoDos = function pasoDos() {
   var botonGrabar = document.getElementById("boton-grabar");
   botonGrabar.style.display = "block";
   var uno = document.getElementById("uno");
@@ -454,15 +458,17 @@ var pasoDos = function pasoDos(stream) {
   var dos = document.getElementById("dos");
   dos.src = "images/paso-a-paso-hover2.svg";
   var screenTexts2 = document.getElementById("textos-pantalla-2");
-  screenTexts2.style.display = "block";
+  screenTexts2.style.display = "none";
   var screen = document.getElementById("pantalla");
   screen.style.display = "block";
   botonGrabar.addEventListener("click", function () {
-    return grabar(stream);
+    return grabar();
   });
 };
 
-var grabar = function grabar(stream) {
+var grabar = function grabar() {
+  console.log(stream.then());
+  var test = stream.then();
   var screenTexts2 = document.getElementById("textos-pantalla-2");
   screenTexts2.style.display = "none";
   var botonGrabar = document.getElementById("boton-grabar");
@@ -472,9 +478,17 @@ var grabar = function grabar(stream) {
   botonFinalizar.addEventListener("click", function () {
     return finalizar();
   });
-  var screen = document.getElementById("pantalla");
-  screen.srcObject = stream;
-  screen.play();
+  var screen = document.getElementById("pantalla"); // recorder = RecordRTC(stream, {
+  //     type: 'gif',
+  //     frameRate: 1,
+  //     quality: 10,
+  //     width: 360,
+  //     hidden: 240,
+  //     onGifRecordingStarted: function() {
+  //      console.log('started')
+  //    },
+  //   });
+  //   recorder.startRecording()    
 };
 
 var finalizar = function finalizar() {
