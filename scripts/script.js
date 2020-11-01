@@ -725,7 +725,9 @@ const darkmode = () => {
 }
 
 const lightmode = () => {
-    console.log("light")
+    const cssLink = document.getElementById("estilos")
+    cssLink.href="styles/dist/stylesheet.css"
+    mode = true
 }
 
 const facebook = document.getElementById("facebook");

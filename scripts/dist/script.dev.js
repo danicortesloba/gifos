@@ -837,7 +837,9 @@ var darkmode = function darkmode() {
 };
 
 var lightmode = function lightmode() {
-  console.log("light");
+  var cssLink = document.getElementById("estilos");
+  cssLink.href = "styles/dist/stylesheet.css";
+  mode = true;
 };
 
 var facebook = document.getElementById("facebook");
