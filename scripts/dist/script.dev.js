@@ -6,12 +6,36 @@ var counter = 12;
 var popId = 1;
 var stream;
 var recorder;
+var blob;
+var countdown;
+var folder = "images";
+var mode = true;
 var seemoreArea = document.getElementById('see-more-area');
 seemoreArea.innerHTML = "";
 var createGifoSection = document.getElementById("crear-gifos");
 createGifoSection.style.display = "none";
 var trendingSection = document.getElementById("trending");
 trendingSection.style.display = "grid";
+var myGifos = document.getElementById("myGifos-section");
+myGifos.style.display = "none";
+var favoritesSection = document.getElementById("favorites-section");
+favoritesSection.style.display = "none";
+var button = document.getElementById("crear");
+button.src = "".concat(folder, "/button-crear-gifo.svg");
+var contar = document.getElementById("contador");
+contar.addEventListener("click", pasoDos);
+var botonGrabar = document.getElementById("boton-grabar");
+botonGrabar.addEventListener("click", function () {
+  return grabar();
+});
+var botonFinalizar = document.getElementById("boton-finalizar");
+botonFinalizar.addEventListener("click", function () {
+  return finalizar();
+});
+var botonSubir = document.getElementById("boton-subir");
+botonSubir.addEventListener("click", function () {
+  return subirGifo();
+});
 var input = document.getElementById("searchInput");
 
 if (input.value.length !== 0) {
@@ -31,32 +55,32 @@ input.addEventListener("keydown", function (event) {
 
 var hoverCreate = function hoverCreate() {
   var image = document.getElementById("crear");
-  image.src = "images/CTA-crear-gifo-hover.svg";
+  image.src = "".concat(folder, "/CTA-crear-gifo-hover.svg");
 };
 
 var offCreate = function offCreate() {
   var image = document.getElementById("crear");
-  image.src = "images/button-crear-gifo.svg";
+  image.src = "".concat(folder, "/button-crear-gifo.svg");
 };
 
 var leftHover = function leftHover() {
   var image = document.getElementById("left");
-  image.src = "images/button-slider-left-hover.svg";
+  image.src = "".concat(folder, "/button-slider-left-hover.svg");
 };
 
 var leftOff = function leftOff() {
   var image = document.getElementById("left");
-  image.src = "images/button-slider-left.svg";
+  image.src = "".concat(folder, "/button-slider-left.svg");
 };
 
 var rightHover = function rightHover() {
   var image = document.getElementById("right");
-  image.src = "images/button-slider-right-hover.svg";
+  image.src = "".concat(folder, "/button-slider-right-hover.svg");
 };
 
 var rightOff = function rightOff() {
   var image = document.getElementById("right");
-  image.src = "images/button-slider-right.svg";
+  image.src = "".concat(folder, "/button-slider-right.svg");
 };
 
 var carrouselRight = function carrouselRight() {
@@ -169,7 +193,7 @@ var renderNoResults = function renderNoResults() {
   div.className = "no-results";
   p1.innerText = input.value;
   p1.className = "no-results-title";
-  p2.innerHTML = "<img src=\"images/icon-busqueda-sin-resultado.svg\" class=\"no-results-image\" ></img>";
+  p2.innerHTML = "<img src=\"".concat(folder, "/icon-busqueda-sin-resultado.svg\" class=\"no-results-image\" ></img>");
   p3.innerText = "Intenta con otra búsqueda";
   p3.className = "no-results-text";
   searchResults.appendChild(div);
@@ -180,34 +204,101 @@ var renderNoResults = function renderNoResults() {
 
 var render = function render(gif, place) {
   return new Promise(function (resolve, reject) {
-    var searchResults = document.getElementById("".concat(place));
+    var currentSection = document.getElementById("".concat(place));
     var div = document.createElement('div');
-    var image = document.createElement('p');
     var icons = document.createElement('div');
-    var favourite = document.createElement('p');
-    var download = document.createElement('p');
-    var maximize = document.createElement('p');
-    var popup = document.createElement('div');
+    var popupWrapper = document.createElement('div');
     var overlay = document.createElement('div');
+    var favourite = document.createElement('img');
+    var image = document.createElement('img');
+    var download = document.createElement('img');
+    var maximize = document.createElement('img');
     overlay.className = "overlay";
     icons.className = "icons";
     div.className = "trending-y";
+    div.id = "trending-y";
+    var favouriteList = JSON.parse(localStorage.getItem("favoriteList")) || [];
 
-    if (gif.active == true) {
-      favourite.innerHTML = "<img src= \"images/icon-fav-active.svg\" alt=\"favourite\" class=\"favourite-active\"/>";
+    if (favouriteList.every(function (item) {
+      return gif.id !== item.id;
+    })) {
+      favourite.src = "".concat(folder, "/icon-fav-hover.svg");
+      favourite.alt = "favourite";
+      favourite.className = "favourite";
     } else {
-      favourite.innerHTML = "<img src= \"images/icon-fav-hover.svg\" alt=\"favourite\" class=\"favourite\"/>";
+      favourite.src = "".concat(folder, "/icon-fav-active.svg");
+      favourite.alt = "favourite";
+      favourite.className = "favourite-active";
     }
 
-    download.innerHTML = "<img src=\"images/icon-download-hover.svg\" alt=\"download\" class=\"download\" />";
-    image.innerHTML = "<img src=".concat(gif.images.downsized.url, " class=\"trending-gif\" alt=\"gif\" >");
-    popup.innerHTML = "<div class=\"popup-wrapper\" id=\"popup-wrapper".concat(popId, "\">\n                                <div class=\"popup\">\n                                    <div class=\"popup-close\" id=\"popup-close").concat(popId, "\">x</div> \n                                    <div class=\"popup-content\" id=\"popup-content\">\n                                        <img src=").concat(gif.images.downsized.url, " class=\"pop-up-image\" alt=\"gif\" ></img>\n                                        <div class=\"popup-footer\">\n                                            <div class= \"pop-up-data\">\n                                                <p>").concat(gif.username, "</p>\n                                                <p>").concat(gif.title, "</p>\n                                            </div>\n                                            <div class=\"pop-up-icons\">\n                                                ").concat(favourite.innerHTML, "\n                                                ").concat(download.innerHTML, "\n                                            <div>\n                                        <div>\n                                    </div>\n                                </div>\n                            </div>");
-    maximize.innerHTML = "<img src =\"images/icon-max-hover.svg\" alt=\"maximize\" class=\"max\" />";
-    searchResults.appendChild(div);
-    div.appendChild(popup);
+    maximize.src = "".concat(folder, "/icon-max-hover.svg");
+    maximize.alt = "maximize";
+    maximize.className = "max";
+    download.src = "".concat(folder, "/icon-download-hover.svg");
+    download.alt = "download";
+    download.className = "download";
+    image.src = gif.images.downsized.url;
+    image.className = "trending-gif";
+    image.alt = "gif";
+    popupWrapper.className = "popup-wrapper";
+    popupWrapper.id = "popup-wrapper".concat(popId);
+    var popup = document.createElement("div");
+    popup.className = "popup";
+    var popupClose = document.createElement('div');
+    popupClose.className = "popup-close";
+    popupClose.id = "popup-close".concat(popId);
+    popupClose.innerHTML = "X";
+    var popupContent = document.createElement('div');
+    popupContent.className = "popup-content";
+    popupContent.id = "popup-content";
+    var popupImage = document.createElement('img');
+    popupImage.src = gif.images.downsized.url;
+    popupImage.className = "pop-up-image";
+    popupImage.alt = "gif";
+    var popupFooter = document.createElement('div');
+    popupFooter.className = "popup-footer";
+    var popupData = document.createElement('div');
+    popupData.className = "pop-up-data";
+    var username = document.createElement('p');
+    username.innerHTML = gif.username;
+    var title = document.createElement('p');
+    title.innerHTML = gif.title;
+    var popupIcons = document.createElement('div');
+    popupIcons.className = "pop-up-icons";
+    popupWrapper.appendChild(popup);
+    popup.appendChild(popupClose);
+    popup.appendChild(popupContent);
+    popupContent.appendChild(popupImage);
+    popupContent.appendChild(popupFooter);
+    popupFooter.appendChild(popupData);
+    popupFooter.appendChild(popupIcons);
+    var fav2 = document.createElement('img');
+
+    if (favouriteList.every(function (item) {
+      return gif.id !== item.id;
+    })) {
+      fav2.src = "".concat(folder, "/icon-fav-hover.svg");
+      fav2.alt = "favourite";
+      fav2.className = "favourite";
+    } else {
+      fav2.src = "".concat(folder, "/icon-fav-active.svg");
+      fav2.alt = "favourite";
+      fav2.className = "favourite-active";
+    }
+
+    popupIcons.appendChild(fav2);
+    var down2 = document.createElement('img');
+    down2.src = "".concat(folder, "/icon-download-hover.svg");
+    down2.alt = "download";
+    down2.className = "download";
+    popupIcons.appendChild(down2);
+    popupData.appendChild(username);
+    popupData.appendChild(title);
+    currentSection.appendChild(div);
+    div.appendChild(popupWrapper);
     div.appendChild(image);
-    div.appendChild(icons);
     div.appendChild(overlay);
+    div.appendChild(icons);
     icons.appendChild(favourite);
     icons.appendChild(download);
     icons.appendChild(maximize);
@@ -221,17 +312,29 @@ var render = function render(gif, place) {
     download.addEventListener("click", function () {
       return downloadImage(gif);
     });
-    image.addEventListener("mouseover", function () {
-      return icons.style.display = "flex";
+    down2.addEventListener("click", function () {
+      return downloadImage(gif);
     });
-    image.addEventListener("mouseover", function () {
+    image.addEventListener("mouseenter", function () {
       return overlay.style.display = "flex";
     });
     image.addEventListener("mouseleave", function () {
       return overlay.style.display = "none";
     });
+    image.addEventListener("click", function () {
+      return maximizeImage(id);
+    });
     favourite.addEventListener("click", function () {
-      return favouriteImage(gif, favourite);
+      return favouriteImage(gif);
+    });
+    fav2.addEventListener("click", function () {
+      return favouriteImage(gif);
+    });
+    fav2.addEventListener("click", function () {
+      return changeHeart(fav2);
+    });
+    favourite.addEventListener("click", function () {
+      return changeHeart(favourite);
     });
     image.addEventListener("click", function () {
       return maximizeImage(id);
@@ -243,7 +346,7 @@ var seeMore = function seeMore() {
   var seeMoreArea = document.getElementById('see-more-area');
   seeMoreArea.innerHTML = "";
   var img = document.createElement('img');
-  img.src = "images/CTA-ver-mas.svg";
+  img.src = "".concat(folder, "/CTA-ver-mas.svg");
   img.id = "see-more";
   img.className = "see-more";
   seeMoreArea.appendChild(img);
@@ -252,10 +355,10 @@ var seeMore = function seeMore() {
     search();
   });
   img.addEventListener("mouseover", function () {
-    return img.src = "images/CTA-ver-mas-hover.svg";
+    return img.src = "".concat(folder, "/CTA-ver-mas-hover.svg");
   });
   img.addEventListener("mouseout", function () {
-    return img.src = "images/CTA-ver-mas.svg";
+    return img.src = "".concat(folder, "/CTA-ver-mas.svg");
   });
 };
 
@@ -277,7 +380,7 @@ var renderSearchSuggestion = function renderSearchSuggestion(topic) {
   var input = document.getElementById("searchInput");
   var searchSuggestions = document.getElementById("search-suggestions");
   var p = document.createElement('p');
-  p.innerHTML = "<img src=\"images/icon-search.svg\" alt=\"search\"/>".concat(topic.name);
+  p.innerHTML = "<img src=\"".concat(folder, "/icon-search.svg\" alt=\"search\"/>").concat(topic.name);
   p.className = "topic";
   searchSuggestions.appendChild(p);
   p.addEventListener('click', function () {
@@ -309,7 +412,7 @@ var seeMoreSuggested = function seeMoreSuggested(query) {
   var seeMoreArea = document.getElementById('see-more-area');
   seeMoreArea.innerHTML = "";
   var img = document.createElement('img');
-  img.src = "images/CTA-ver-mas.svg";
+  img.src = "".concat(folder, "/CTA-ver-mas.svg");
   img.id = "see-more";
   img.className = "see-more";
   seeMoreArea.appendChild(img);
@@ -318,10 +421,10 @@ var seeMoreSuggested = function seeMoreSuggested(query) {
     searchForSuggestion(query);
   });
   img.addEventListener("mouseover", function () {
-    return img.src = "images/CTA-ver-mas-hover.svg";
+    return img.src = "".concat(folder, "/CTA-ver-mas-hover.svg");
   });
   img.addEventListener("mouseout", function () {
-    return img.src = "images/CTA-ver-mas.svg";
+    return img.src = "".concat(folder, "/CTA-ver-mas.svg");
   });
 };
 
@@ -364,36 +467,54 @@ var downloadImage = function downloadImage(item) {
   });
 };
 
-var favouriteImage = function favouriteImage(gif, favourite) {
+var changeHeart = function changeHeart(favourite, gif) {
+  if (favourite.src == "".concat(folder, "/icon-fav-hover.svg")) {
+    favourite.src = "".concat(folder, "/icon-fav-active.svg");
+    favourite.alt = "favourite";
+    favourite["class"] = "favourite-active";
+    window.location.reload();
+  }
+
+  if (favourite.src = "".concat(folder, "/icon-fav-active.svg")) {
+    favourite.src = "".concat(folder, "/icon-fav-hover.svg");
+    favourite.alt = "favourite";
+    favourite.className = "favourite";
+    window.location.reload();
+  }
+};
+
+var favouriteImage = function favouriteImage(gif) {
   var favouriteList = JSON.parse(localStorage.getItem("favoriteList")) || [];
 
-  if (!gif.active && !favouriteList.includes(gif)) {
-    gif.active = true;
+  if (favouriteList.every(function (item) {
+    return gif.id !== item.id;
+  })) {
     localStorage.setItem("favoriteList", JSON.stringify(favouriteList.concat(gif)));
-    favourite.innerHTML = "<img src= \"images/icon-fav-active.svg\" alt=\"favourite\" class=\"favourite-active\"/>";
     console.log(localStorage);
   } else {
     localStorage.setItem("favoriteList", JSON.stringify(favouriteList.filter(function (item) {
       return item.title !== gif.title;
     })));
-    gif.active = false;
-    favourite.innerHTML = "<img src= \"images/icon-fav-hover.svg\" alt=\"favourite\" class=\"favourite\"/>";
+    renderFavourites();
   }
 };
 
 var renderFavourites = function renderFavourites() {
+  var favouriteList = JSON.parse(localStorage.getItem("favoriteList")) || [];
   favouritesSection = document.getElementById("favorites-section");
   favouritesSection.style.display = "flex";
+  var myGifos = document.getElementById("myGifos-section");
+  myGifos.style.display = "none";
   searchSection = document.getElementById("search-section");
   searchSection.style.display = "none";
   var carrousel = document.getElementById('favourites-carrousel');
   carrousel.innerHTML = '';
 
-  if (window.localStorage.length == 0) {
+  if (favouriteList.length == 0) {
     var emptyfav = document.getElementById("empty-fav");
     emptyfav.innerHTML = '';
     var emptyicon = document.createElement("p");
-    emptyicon.innerHTML = "<img src =\"images/icon-fav-sin-contenido.svg\" alt=\"No hay favoritos\" class=\"empty-favorites\" />";
+    emptyicon.innerHTML = "<img src =\"".concat(folder, "/icon-fav-sin-contenido.svg\" alt=\"No hay favoritos\" class=\"empty-favorites\" />");
     var emptyfaveMessage = document.createElement("p");
     emptyfaveMessage.className = "empty-message";
     emptyfaveMessage.innerHTML = "¡Guarda tu primer GIFO en Favoritos para que se muestre aquí!";
@@ -409,6 +530,10 @@ var renderFavourites = function renderFavourites() {
 };
 
 var crearGifo = function crearGifo() {
+  var button = document.getElementById("crear");
+  button.src = "".concat(folder, "/CTA-crear-gifo-active.svg");
+  var myGifos = document.getElementById("myGifos-section");
+  myGifos.style.display = "none";
   var favouritesSection = document.getElementById("favorites-section");
   favouritesSection.style.display = "none";
   var searchSection = document.getElementById("search-section");
@@ -425,15 +550,27 @@ var crearGifo = function crearGifo() {
   botonFinalizar.style.display = "none";
   var botonSubir = document.getElementById("boton-subir");
   botonSubir.style.display = "none";
+  var screen = document.getElementById("pantalla");
+  screen.style.display = "none";
+  var previewImage = document.getElementById("preview-image");
+  previewImage.style.display = "none";
+  var purpleOverlay = document.getElementById("purple-overlay");
+  purpleOverlay.style.display = "none";
+  var loading = document.getElementById("loading");
+  loading.style.display = "none";
+  var loadingText = document.getElementById("loading-text");
+  loadingText.style.display = "none";
 };
 
 var pasoUno = function pasoUno() {
   var screenTexts = document.getElementById("textos-pantalla");
   screenTexts.style.display = "none";
   var uno = document.getElementById("uno");
-  uno.src = "images/paso-a-paso-hover1.svg";
+  uno.src = "".concat(folder, "/paso-a-paso-hover1.svg");
   var botonComenzar = document.getElementById("boton-crear");
   botonComenzar.style.display = "none";
+  var botonSubir = document.getElementById("boton-subir");
+  botonSubir.style.display = "none";
   var screenTexts2 = document.getElementById("textos-pantalla-2");
   screenTexts2.style.display = "flex";
   stream = navigator.mediaDevices.getUserMedia({
@@ -443,80 +580,175 @@ var pasoUno = function pasoUno() {
         max: 450
       }
     }
-  }).then(function (stream) {
+  }).then(function (mediaStream) {
     var screen = document.getElementById("pantalla");
-    screen.srcObject = stream;
+    screen.srcObject = mediaStream;
     screen.play();
+    stream = mediaStream;
   }).then(pasoDos());
 };
 
-var pasoDos = function pasoDos() {
-  var botonGrabar = document.getElementById("boton-grabar");
+function pasoDos() {
+  var previewImage = document.getElementById("preview-image");
+  previewImage.style.display = "none";
+  var contador = document.getElementById("contador");
+  contador.style.display = "block";
   botonGrabar.style.display = "block";
   var uno = document.getElementById("uno");
-  uno.src = "images/paso-a-paso1.svg";
+  uno.src = "".concat(folder, "/paso-a-paso1.svg");
   var dos = document.getElementById("dos");
-  dos.src = "images/paso-a-paso-hover2.svg";
+  dos.src = "".concat(folder, "/paso-a-paso-hover2.svg");
   var screenTexts2 = document.getElementById("textos-pantalla-2");
   screenTexts2.style.display = "none";
+  var botonSubir = document.getElementById("boton-subir");
+  botonSubir.style.display = "none";
   var screen = document.getElementById("pantalla");
   screen.style.display = "block";
-  botonGrabar.addEventListener("click", function () {
-    return grabar();
-  });
-};
+}
 
-var grabar = function grabar() {
-  console.log(stream.then());
-  var test = stream.then();
+function grabar() {
   var screenTexts2 = document.getElementById("textos-pantalla-2");
   screenTexts2.style.display = "none";
   var botonGrabar = document.getElementById("boton-grabar");
   botonGrabar.style.display = "none";
-  var botonFinalizar = document.getElementById("boton-finalizar");
+  var botonSubir = document.getElementById("boton-subir");
+  botonSubir.style.display = "none";
   botonFinalizar.style.display = "block";
-  botonFinalizar.addEventListener("click", function () {
-    return finalizar();
+  contador();
+  recorder = RecordRTC(stream, {
+    type: 'gif',
+    frameRate: 1,
+    quality: 10,
+    height: 370,
+    width: 430,
+    hidden: 240,
+    onGifRecordingStarted: function onGifRecordingStarted() {
+      console.log('started');
+    }
   });
-  var screen = document.getElementById("pantalla"); // recorder = RecordRTC(stream, {
-  //     type: 'gif',
-  //     frameRate: 1,
-  //     quality: 10,
-  //     width: 360,
-  //     hidden: 240,
-  //     onGifRecordingStarted: function() {
-  //      console.log('started')
-  //    },
-  //   });
-  //   recorder.startRecording()    
+  recorder.startRecording();
+}
+
+var contador = function contador() {
+  var sec = 0;
+  var min = 0;
+  var hour = 0;
+  countdown = setInterval(function () {
+    var counter = document.getElementById("contador");
+    counter.innerHTML = "".concat(hour, ":").concat(min, ":").concat(sec);
+    sec++;
+
+    if (sec == 60) {
+      sec = 0;
+      min++;
+
+      if (min == 60) {
+        min = 0;
+        hour++;
+      }
+    }
+  }, 1000);
 };
 
-var finalizar = function finalizar() {
+function finalizar() {
+  clearInterval(countdown);
+  var counter = document.getElementById("contador");
+  counter.innerHTML = "";
+  counter.innerHTML = "REPETIR CAPTURA";
   var botonFinalizar = document.getElementById("boton-finalizar");
   botonFinalizar.style.display = "none";
-  var botonSubir = document.getElementById("boton-subir");
   botonSubir.style.display = "block";
+  recorder.stopRecording();
+  blob = recorder.getBlob();
+  var urlCreator = window.URL || window.webkitURL;
+  var imageURL = urlCreator.createObjectURL(blob);
   var screen = document.getElementById("pantalla");
-  var stream = screen.srcObject;
-  var tracks = stream.getTracks();
-  tracks.forEach(function (track) {
-    track.stop();
+  screen.style.display = "none";
+  var previewImage = document.getElementById("preview-image");
+  previewImage.src = imageURL;
+  previewImage.style.display = "block";
+}
+
+function subirGifo() {
+  var botonSubir = document.getElementById("boton-subir");
+  botonSubir.style.display = "none";
+  var botonFinalizar = document.getElementById("boton-finalizar");
+  botonFinalizar.style.display = "none";
+  var dos = document.getElementById("dos");
+  dos.src = "".concat(folder, "/paso-a-paso2.svg");
+  var tres = document.getElementById("tres");
+  tres.src = "".concat(folder, "/paso-a-paso-hover3.svg");
+  var form = new FormData();
+  form.append("file", blob, "myGif.gif");
+  form.append("tags", "gif, person, funny");
+  var overlay = document.getElementById("purple-overlay");
+  overlay.style.display = "block";
+  var loading = document.getElementById("loading");
+  var loadingText = document.getElementById("loading-text");
+  loading.style.display = "block";
+  loadingText.style.display = "block";
+  fetch("http://upload.giphy.com/v1/gifs?api_key=".concat(apiKey), {
+    method: "POST",
+    body: form
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return guardarMiGifo(response.data.id);
   });
-  screen.addEventListener("click", function () {
-    return playVideo();
-  });
-  botonSubir.addEventListener("click", function () {
-    return subirGifo();
+}
+
+var guardarMiGifo = function guardarMiGifo(id) {
+  var loading = document.getElementById("loading");
+  var loadingText = document.getElementById("loading-text");
+  loading.src = "".concat(folder, "/check.svg");
+  loadingText.innerText = "Gifo subido con éxito";
+  url = "http://api.giphy.com/v1/gifs/".concat(id, "?api_key=").concat(apiKey);
+  fetch(url).then(function (response) {
+    return response.json();
+  }).then(function (gif) {
+    return addGifToMyList(gif.data);
   });
 };
 
-var playVideo = function playVideo() {
-  var screen = document.getElementById("pantalla");
-  screen.play();
+var addGifToMyList = function addGifToMyList(gif) {
+  var myGifoList = JSON.parse(localStorage.getItem("myGifoList")) || [];
+  localStorage.setItem("myGifoList", JSON.stringify(myGifoList.concat(gif)));
 };
 
-var subirGifo = function subirGifo() {
-  console.log("Gifo subido");
+var renderMyGifos = function renderMyGifos() {
+  var trending = document.getElementById("trending");
+  trending.style.display = "block";
+  var carrousel = document.getElementById('myGifos-carrousel');
+  carrousel.innerHTML = '';
+  var favouritesSection = document.getElementById("favorites-section");
+  favouritesSection.style.display = "none";
+  var searchSection = document.getElementById("search-section");
+  searchSection.style.display = "none";
+  var createGifoSection = document.getElementById("crear-gifos");
+  createGifoSection.style.display = "none";
+  var myGifos = document.getElementById("myGifos-section");
+  myGifos.style.display = "flex";
+  var myGifoList = JSON.parse(localStorage.getItem("myGifoList")) || [];
+
+  if (myGifoList.length == 0 || window.localStorage.length == 0) {
+    var emptyMyGifos = document.getElementById("empty-myGifos");
+    emptyMyGifos.style.display = "flex";
+    emptyMyGifos.innerHTML = '';
+    var emptyicon = document.createElement("p");
+    emptyicon.innerHTML = "<img src =\"".concat(folder, "/icon-mis-gifos-sin-contenido.svg\" alt=\"No hay gifos\" class=\"empty-myGifos\" />");
+    var emptyfaveMessage = document.createElement("p");
+    emptyfaveMessage.className = "empty-message";
+    emptyfaveMessage.innerHTML = "¡Anímate a crear tu primer GIFO!";
+    emptyMyGifos.appendChild(emptyicon);
+    emptyMyGifos.appendChild(emptyfaveMessage);
+  } else {
+    place = "myGifos-carrousel";
+    var arrayOfValues = JSON.parse(localStorage.getItem("myGifoList")) || [];
+    console.log(arrayOfValues);
+    arrayOfValues.forEach(function (value) {
+      return render(value, place);
+    });
+  }
 };
 
 var keyCheck = function keyCheck(event) {
@@ -539,6 +771,8 @@ var keyCheck = function keyCheck(event) {
 };
 
 var clear = function clear() {
+  var myGifos = document.getElementById("myGifos-section");
+  myGifos.style.display = "none";
   var createGifoSection = document.getElementById("crear-gifos");
   createGifoSection.style.display = "none";
   var trendingHeader = document.getElementById('trending-topics-header');
@@ -557,7 +791,7 @@ var clearResults = function clearResults(event) {
   searchSuggestions.innerHTML = '';
   var input = document.getElementById("searchInput");
   input.value = '';
-  input.style.backgroundImage = "url('images/icon-search.svg')";
+  input.style.backgroundImage = "url('".concat(folder, "/icon-search.svg')");
   var seeMore = document.getElementById('see-more-area');
   seeMore.innerHTML = '';
 };
@@ -572,6 +806,10 @@ var clearSeeMore = function clearSeeMore() {
 };
 
 var showHome = function showHome() {
+  var button = document.getElementById("crear");
+  button.src = "".concat(folder, "/button-crear-gifo.svg");
+  var myGifos = document.getElementById("myGifos-section");
+  myGifos.style.display = "none";
   var searchSection = document.getElementById("search-section");
   var searchResults = document.getElementById("search-results");
   var seeMoreArea = document.getElementById("see-more-area");
@@ -588,34 +826,52 @@ var showHome = function showHome() {
   counter = 12;
 };
 
+var darkmode = function darkmode() {
+  if (mode) {
+    var cssLink = document.getElementById("estilos");
+    cssLink.href = "styles/dist/stylesheet-dark.css";
+    mode = false;
+  } else {
+    lightmode();
+  }
+};
+
+var lightmode = function lightmode() {
+  console.log("light");
+};
+
 var facebook = document.getElementById("facebook");
 var twitter = document.getElementById("twitter");
 var instagram = document.getElementById("instagram");
 var favoritosLink = document.getElementById("favoritos-link");
 var createGifo = document.getElementById("boton-crear");
+var darkMode = document.getElementById("dark-mode");
 facebook.addEventListener("mouseover", function () {
-  return facebook.src = "images/icon_facebook_hover.svg";
+  return facebook.src = "".concat(folder, "/icon_facebook_hover.svg");
 });
 facebook.addEventListener("mouseout", function () {
-  return facebook.src = "images/icon_facebook.svg";
+  return facebook.src = "".concat(folder, "/icon_facebook.svg");
 });
 twitter.addEventListener("mouseover", function () {
-  return twitter.src = "images/icon-twitter-hover.svg";
+  return twitter.src = "".concat(folder, "/icon-twitter-hover.svg");
 });
 twitter.addEventListener("mouseout", function () {
-  return twitter.src = "images/icon-twitter.svg";
+  return twitter.src = "".concat(folder, "/icon-twitter.svg");
 });
 instagram.addEventListener("mouseover", function () {
-  return instagram.src = "images/icon_instagram-hover.svg";
+  return instagram.src = "".concat(folder, "/icon_instagram-hover.svg");
 });
 instagram.addEventListener("mouseout", function () {
-  return instagram.src = "images/icon_instagram.svg";
+  return instagram.src = "".concat(folder, "/icon_instagram.svg");
 });
 favoritosLink.addEventListener("click", function () {
   return renderFavourites();
 });
 createGifo.addEventListener("click", function () {
   return pasoUno();
+});
+darkMode.addEventListener("click", function () {
+  return darkmode();
 });
 getTrendingGifs();
 getTrendingTerms();

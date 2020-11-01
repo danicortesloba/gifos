@@ -4,6 +4,11 @@ let counter = 12;
 let popId = 1;
 let stream
 let recorder
+let blob
+let countdown
+let folder ="images"
+let mode = true;
+
 
 const seemoreArea = document.getElementById('see-more-area')
 seemoreArea.innerHTML = ""
@@ -11,6 +16,20 @@ const createGifoSection = document.getElementById("crear-gifos")
 createGifoSection.style.display = "none"
 const trendingSection = document.getElementById("trending")
 trendingSection.style.display ="grid"
+const myGifos = document.getElementById("myGifos-section")
+myGifos.style.display = "none"
+const favoritesSection = document.getElementById("favorites-section")
+favoritesSection.style.display = "none"
+const button = document.getElementById("crear")
+button.src = `${folder}/button-crear-gifo.svg`
+const contar = document.getElementById("contador")
+contar.addEventListener("click", pasoDos)
+const botonGrabar = document.getElementById("boton-grabar")
+botonGrabar.addEventListener("click",() => grabar())
+const botonFinalizar = document.getElementById("boton-finalizar")
+botonFinalizar.addEventListener("click", () => finalizar())
+const botonSubir = document.getElementById("boton-subir")
+botonSubir.addEventListener("click", () => subirGifo()) 
 
 const input = document.getElementById("searchInput")
 if(input.value.length !== 0){
@@ -24,32 +43,32 @@ input.addEventListener("keydown", event => keyCheck(event))
 
 const hoverCreate = () => {
     const image = document.getElementById("crear")
-    image.src="images/CTA-crear-gifo-hover.svg"
+    image.src=`${folder}/CTA-crear-gifo-hover.svg`
 }
 
 const offCreate = () =>{
     const image = document.getElementById("crear")
-    image.src="images/button-crear-gifo.svg"
+    image.src=`${folder}/button-crear-gifo.svg`    
 }
 
 const leftHover = () => {
     const image = document.getElementById("left")
-    image.src="images/button-slider-left-hover.svg"
+    image.src=`${folder}/button-slider-left-hover.svg`
 }
 
 const leftOff = () => {
     const image = document.getElementById("left")
-    image.src="images/button-slider-left.svg"
+    image.src=`${folder}/button-slider-left.svg`
 }
 
 const rightHover = () => {
     const image = document.getElementById("right")
-    image.src="images/button-slider-right-hover.svg"
+    image.src=`${folder}/button-slider-right-hover.svg`
 }
 
 const rightOff = () => {
     const image = document.getElementById("right")
-    image.src="images/button-slider-right.svg"
+    image.src=`${folder}/button-slider-right.svg`
 }
 
 const carrouselRight = () => {
@@ -137,7 +156,7 @@ const renderNoResults = () => {
     div.className = "no-results"
     p1.innerText = input.value
     p1.className = "no-results-title"
-    p2.innerHTML = `<img src="images/icon-busqueda-sin-resultado.svg" class="no-results-image" ></img>`
+    p2.innerHTML = `<img src="${folder}/icon-busqueda-sin-resultado.svg" class="no-results-image" ></img>`
     p3.innerText = "Intenta con otra búsqueda"
     p3.className = "no-results-text"
     searchResults.appendChild(div)
@@ -145,52 +164,97 @@ const renderNoResults = () => {
     div.appendChild(p2)
     div.appendChild(p3)
 }
-
 const render = (gif, place) => {
     return new Promise((resolve, reject) => {
-        const searchResults = document.getElementById(`${place}`)
+        const currentSection = document.getElementById(`${place}`)
         const div = document.createElement('div')
-        const image = document.createElement('p')
         const icons = document.createElement('div')
-        const favourite = document.createElement('p')
-        const download = document.createElement('p')
-        const maximize = document.createElement('p') 
-        const popup = document.createElement('div')
+        const popupWrapper = document.createElement('div')
         const overlay = document.createElement('div')
+        const favourite = document.createElement('img')
+        const image = document.createElement('img')
+        const download = document.createElement('img')
+        const maximize = document.createElement('img') 
+        
         overlay.className = "overlay"
         icons.className="icons"
         div.className="trending-y"
-        if(gif.active == true){
-            favourite.innerHTML=`<img src= "images/icon-fav-active.svg" alt="favourite" class="favourite-active"/>`
+        div.id="trending-y"
+        const favouriteList = JSON.parse(localStorage.getItem("favoriteList")) || []
+        if(favouriteList.every(item => gif.id !== item.id)){
+            favourite.src= `${folder}/icon-fav-hover.svg` 
+            favourite.alt="favourite" 
+            favourite.className="favourite"
         }else{
-            favourite.innerHTML=`<img src= "images/icon-fav-hover.svg" alt="favourite" class="favourite"/>`
+            favourite.src= `${folder}/icon-fav-active.svg` 
+            favourite.alt="favourite" 
+            favourite.className="favourite-active"     
         }
-        download.innerHTML = `<img src="images/icon-download-hover.svg" alt="download" class="download" />`
-        image.innerHTML = `<img src=${gif.images.downsized.url} class="trending-gif" alt="gif" >`  
-        popup.innerHTML = `<div class="popup-wrapper" id="popup-wrapper${popId}">
-                                <div class="popup">
-                                    <div class="popup-close" id="popup-close${popId}">x</div> 
-                                    <div class="popup-content" id="popup-content">
-                                        <img src=${gif.images.downsized.url} class="pop-up-image" alt="gif" ></img>
-                                        <div class="popup-footer">
-                                            <div class= "pop-up-data">
-                                                <p>${gif.username}</p>
-                                                <p>${gif.title}</p>
-                                            </div>
-                                            <div class="pop-up-icons">
-                                                ${favourite.innerHTML}
-                                                ${download.innerHTML}
-                                            <div>
-                                        <div>
-                                    </div>
-                                </div>
-                            </div>`
-        maximize.innerHTML = `<img src ="images/icon-max-hover.svg" alt="maximize" class="max" />`
-        searchResults.appendChild(div)
-        div.appendChild(popup)
+        maximize.src = `${folder}/icon-max-hover.svg` 
+        maximize.alt="maximize" 
+        maximize.className="max"
+        download.src=`${folder}/icon-download-hover.svg` 
+        download.alt="download" 
+        download.className="download"
+        image.src = gif.images.downsized.url
+        image.className="trending-gif" 
+        image.alt="gif"  
+        popupWrapper.className="popup-wrapper"
+        popupWrapper.id=`popup-wrapper${popId}`
+        const popup = document.createElement("div")
+        popup.className ="popup"
+        const popupClose = document.createElement('div')
+        popupClose.className="popup-close"
+        popupClose.id=`popup-close${popId}`
+        popupClose.innerHTML="X"
+        const popupContent = document.createElement('div')
+        popupContent.className = "popup-content"
+        popupContent.id = "popup-content"
+        const popupImage = document.createElement('img')
+        popupImage.src = gif.images.downsized.url
+        popupImage.className = "pop-up-image"
+        popupImage.alt = "gif"
+        const popupFooter = document.createElement('div')
+        popupFooter.className="popup-footer"
+        const popupData = document.createElement('div')
+        popupData.className = "pop-up-data"            
+        const username = document.createElement('p')
+        username.innerHTML=gif.username
+        const title = document.createElement('p')
+        title.innerHTML = gif.title            
+        const popupIcons = document.createElement('div')
+        popupIcons.className = "pop-up-icons"
+        popupWrapper.appendChild(popup)
+        popup.appendChild(popupClose)
+        popup.appendChild(popupContent)
+        popupContent.appendChild(popupImage)
+        popupContent.appendChild(popupFooter)
+        popupFooter.appendChild(popupData)
+        popupFooter.appendChild(popupIcons)
+        const fav2 = document.createElement('img')
+        if(favouriteList.every(item => gif.id !== item.id)){
+            fav2.src= `${folder}/icon-fav-hover.svg` 
+            fav2.alt="favourite" 
+            fav2.className="favourite"
+        }else{
+            fav2.src= `${folder}/icon-fav-active.svg` 
+            fav2.alt="favourite" 
+            fav2.className="favourite-active"     
+        }
+        popupIcons.appendChild(fav2)
+        const down2 = document.createElement('img')
+        down2.src=`${folder}/icon-download-hover.svg` 
+        down2.alt="download" 
+        down2.className="download"
+        popupIcons.appendChild(down2)
+        popupData.appendChild(username)
+        popupData.appendChild(title)
+        
+        currentSection.appendChild(div)
+        div.appendChild(popupWrapper)
         div.appendChild(image)
-        div.appendChild(icons)
         div.appendChild(overlay)
+        div.appendChild(icons)
         icons.appendChild(favourite)
         icons.appendChild(download)
         icons.appendChild(maximize)
@@ -198,12 +262,16 @@ const render = (gif, place) => {
         image.addEventListener("click", () => maximizeImage(id))
         maximize.addEventListener("click", () => maximizeImage(id))
         download.addEventListener("click", () => downloadImage(gif))
-        image.addEventListener("mouseover", () => icons.style.display = "flex")
-        image.addEventListener("mouseover", () => overlay.style.display = "flex")
+        down2.addEventListener("click", () => downloadImage(gif))
+        image.addEventListener("mouseenter", () => overlay.style.display = "flex")
         image.addEventListener("mouseleave", () => overlay.style.display = "none")
-        favourite.addEventListener("click", () => favouriteImage(gif, favourite))
+       
         image.addEventListener("click", () => maximizeImage(id))
-            
+        favourite.addEventListener("click", () => favouriteImage(gif))
+        fav2.addEventListener("click", () => favouriteImage(gif))
+        fav2.addEventListener("click", () => changeHeart(fav2))
+        favourite.addEventListener("click", () => changeHeart(favourite))
+        image.addEventListener("click", () => maximizeImage(id))      
     })
         .then(popId += 1)
         
@@ -213,7 +281,7 @@ const seeMore = () => {
     const seeMoreArea = document.getElementById('see-more-area')
     seeMoreArea.innerHTML = ""
     const img = document.createElement('img')
-    img.src = "images/CTA-ver-mas.svg"
+    img.src = `${folder}/CTA-ver-mas.svg`
     img.id = "see-more"
     img.className = "see-more"
     seeMoreArea.appendChild(img)
@@ -221,8 +289,8 @@ const seeMore = () => {
         counter += 12
         search()
     })
-    img.addEventListener("mouseover", () => img.src = "images/CTA-ver-mas-hover.svg")
-    img.addEventListener("mouseout", () => img.src = "images/CTA-ver-mas.svg")
+    img.addEventListener("mouseover", () => img.src = `${folder}/CTA-ver-mas-hover.svg`)
+    img.addEventListener("mouseout", () => img.src = `${folder}/CTA-ver-mas.svg`)
 }
 
 const getSearchSuggestions = () => {
@@ -241,7 +309,7 @@ const renderSearchSuggestion = (topic) => {
     const input = document.getElementById("searchInput")
     const searchSuggestions = document.getElementById("search-suggestions")
     const p = document.createElement('p')
-    p.innerHTML = `<img src="images/icon-search.svg" alt="search"/>${topic.name}`
+    p.innerHTML = `<img src="${folder}/icon-search.svg" alt="search"/>${topic.name}`
     p.className = "topic"
     searchSuggestions.appendChild(p)
     p.addEventListener('click',() => searchForSuggestion(`${topic.name}`))
@@ -263,7 +331,7 @@ const seeMoreSuggested = (query) => {
     const seeMoreArea = document.getElementById('see-more-area')
     seeMoreArea.innerHTML = ""
     const img = document.createElement('img')
-    img.src = "images/CTA-ver-mas.svg"
+    img.src = `${folder}/CTA-ver-mas.svg`
     img.id = "see-more"
     img.className = "see-more"
     seeMoreArea.appendChild(img)
@@ -272,8 +340,8 @@ const seeMoreSuggested = (query) => {
         searchForSuggestion(query)
     })
 
-    img.addEventListener("mouseover", () => img.src = "images/CTA-ver-mas-hover.svg")
-    img.addEventListener("mouseout", () => img.src = "images/CTA-ver-mas.svg")
+    img.addEventListener("mouseover", () => img.src = `${folder}/CTA-ver-mas-hover.svg`)
+    img.addEventListener("mouseout", () => img.src = `${folder}/CTA-ver-mas.svg`)
 }
 
 const maximizeImage = (id) => {
@@ -293,33 +361,49 @@ const downloadImage = async (item) => {
     a.click()
 }
 
-const favouriteImage = (gif, favourite) => {
+const changeHeart = (favourite, gif) => {
+    if(favourite.src==`${folder}/icon-fav-hover.svg`){
+        favourite.src=`${folder}/icon-fav-active.svg` 
+        favourite.alt="favourite" 
+        favourite.class="favourite-active"
+        window.location.reload()
+        
+    }
+    if(favourite.src=`${folder}/icon-fav-active.svg`){
+        favourite.src=`${folder}/icon-fav-hover.svg` 
+        favourite.alt="favourite" 
+        favourite.className="favourite"
+        window.location.reload()
+    }
+}
+
+const favouriteImage = (gif) => {
     const favouriteList = JSON.parse(localStorage.getItem("favoriteList")) || []
-    if(!gif.active && !favouriteList.includes(gif)){
-        gif.active = true
+    if(favouriteList.every(item => gif.id !== item.id)){
         localStorage.setItem("favoriteList", JSON.stringify(favouriteList.concat(gif)))
-        favourite.innerHTML=`<img src= "images/icon-fav-active.svg" alt="favourite" class="favourite-active"/>`
        console.log(localStorage)
     }else{
-        localStorage.setItem("favoriteList", JSON.stringify(favouriteList.filter(item => item.title !== gif.title)))
-        gif.active = false
-        favourite.innerHTML=`<img src= "images/icon-fav-hover.svg" alt="favourite" class="favourite"/>`
+        localStorage.setItem("favoriteList", JSON.stringify(favouriteList.filter(item => item.title !== gif.title))) 
+        renderFavourites() 
     }
 }
 
 
 const renderFavourites = () =>{
+    const favouriteList = JSON.parse(localStorage.getItem("favoriteList")) || []
     favouritesSection = document.getElementById("favorites-section")
     favouritesSection.style.display="flex"
+    const myGifos = document.getElementById("myGifos-section")
+    myGifos.style.display = "none"
     searchSection = document.getElementById("search-section")
     searchSection.style.display = "none"
     const carrousel = document.getElementById('favourites-carrousel')
     carrousel.innerHTML = ''
-    if(window.localStorage.length == 0){
+    if(favouriteList.length == 0){
         const emptyfav = document.getElementById("empty-fav")
         emptyfav.innerHTML= ''
        const emptyicon = document.createElement("p")
-       emptyicon.innerHTML = `<img src ="images/icon-fav-sin-contenido.svg" alt="No hay favoritos" class="empty-favorites" />`
+       emptyicon.innerHTML = `<img src ="${folder}/icon-fav-sin-contenido.svg" alt="No hay favoritos" class="empty-favorites" />`
        const emptyfaveMessage = document.createElement("p")
        emptyfaveMessage.className="empty-message"
        emptyfaveMessage.innerHTML="¡Guarda tu primer GIFO en Favoritos para que se muestre aquí!"
@@ -338,6 +422,10 @@ const renderFavourites = () =>{
 
 
 const crearGifo = () => {
+    const button = document.getElementById("crear")
+    button.src = `${folder}/CTA-crear-gifo-active.svg`
+    const myGifos = document.getElementById("myGifos-section")
+    myGifos.style.display = "none"
     const favouritesSection = document.getElementById("favorites-section")
     favouritesSection.style.display="none"
     const searchSection = document.getElementById("search-section")
@@ -354,15 +442,27 @@ const crearGifo = () => {
     botonFinalizar.style.display="none"
     const botonSubir = document.getElementById("boton-subir")
     botonSubir.style.display="none"
+    const screen = document.getElementById("pantalla")
+    screen.style.display="none"
+    const previewImage = document.getElementById("preview-image")
+    previewImage.style.display = "none"
+    const purpleOverlay = document.getElementById("purple-overlay")
+    purpleOverlay.style.display = "none"
+    const loading = document.getElementById("loading")
+    loading.style.display = "none"
+    const loadingText = document.getElementById("loading-text")
+    loadingText.style.display = "none"
 }
 
 const pasoUno = () => {
     const screenTexts = document.getElementById("textos-pantalla")
     screenTexts.style.display = "none"
     const uno = document.getElementById("uno")
-    uno.src="images/paso-a-paso-hover1.svg"
+    uno.src=`${folder}/paso-a-paso-hover1.svg`
     const botonComenzar = document.getElementById("boton-crear")
     botonComenzar.style.display="none"
+    const botonSubir = document.getElementById("boton-subir")
+    botonSubir.style.display="none"
     const screenTexts2 = document.getElementById("textos-pantalla-2")
     screenTexts2.style.display="flex"
     stream = navigator.mediaDevices.getUserMedia({
@@ -371,76 +471,174 @@ const pasoUno = () => {
            height: { max: 450 }
         }
      })
-     .then(function(stream) {
+     .then(function(mediaStream) {
         const screen = document.getElementById("pantalla")
-        screen.srcObject = stream
+        screen.srcObject = mediaStream
         screen.play()
+        stream = mediaStream
      })
 
      .then(pasoDos()) 
 }
-const pasoDos = () =>{
-    const botonGrabar = document.getElementById("boton-grabar")
+
+function pasoDos (){
+    const previewImage = document.getElementById("preview-image")
+    previewImage.style.display = "none"
+    const contador = document.getElementById("contador")
+    contador.style.display ="block"
     botonGrabar.style.display="block"
     const uno = document.getElementById("uno")
-    uno.src="images/paso-a-paso1.svg"
+    uno.src=`${folder}/paso-a-paso1.svg`
     const dos = document.getElementById("dos")
-    dos.src="images/paso-a-paso-hover2.svg"
+    dos.src=`${folder}/paso-a-paso-hover2.svg`
     const screenTexts2 = document.getElementById("textos-pantalla-2")
     screenTexts2.style.display="none"
+    const botonSubir = document.getElementById("boton-subir")
+    botonSubir.style.display="none"
     const screen = document.getElementById("pantalla")
     screen.style.display="block"
-    botonGrabar.addEventListener("click",() => grabar())
+  
 }
 
-const grabar = () => {
-    console.log(stream.then())
-    const test = stream.then()
+function grabar() {
     const screenTexts2 = document.getElementById("textos-pantalla-2")
     screenTexts2.style.display="none"
     const botonGrabar = document.getElementById("boton-grabar")
     botonGrabar.style.display="none"
-    const botonFinalizar = document.getElementById("boton-finalizar")
+    const botonSubir = document.getElementById("boton-subir")
+    botonSubir.style.display="none"
     botonFinalizar.style.display="block"
-    botonFinalizar.addEventListener("click", () => finalizar())
-    const screen = document.getElementById("pantalla")
-    
-    // recorder = RecordRTC(stream, {
-    //     type: 'gif',
-    //     frameRate: 1,
-    //     quality: 10,
-    //     width: 360,
-    //     hidden: 240,
-    //     onGifRecordingStarted: function() {
-    //      console.log('started')
-    //    },
-    //   });
-    //   recorder.startRecording()    
+   
+    contador() 
+    recorder = RecordRTC(stream, {
+        type: 'gif',
+        frameRate: 1,
+        quality: 10,
+        height: 370,
+        width: 430,
+        hidden: 240,
+        onGifRecordingStarted: function() {
+         console.log('started')
+       },
+      });
+      recorder.startRecording()        
 }
 
-const finalizar = () => {
+const contador = () => {
+    let sec = 0
+    let min = 0
+    let hour = 0
+    countdown = setInterval(function (){
+        const counter = document.getElementById("contador")
+        counter.innerHTML = `${hour}:${min}:${sec}`
+        sec++
+        if(sec == 60) {
+            sec = 0
+            min++
+            if(min == 60){
+                min = 0
+                hour++
+            }
+        }
+    }, 1000)
+}
+
+function finalizar(){
+    clearInterval(countdown)
+    const counter = document.getElementById("contador")
+    counter.innerHTML = ""
+    counter.innerHTML = "REPETIR CAPTURA"
     const botonFinalizar = document.getElementById("boton-finalizar")
     botonFinalizar.style.display="none"
-    const botonSubir = document.getElementById("boton-subir")
+   
     botonSubir.style.display="block"
+    recorder.stopRecording()
+    blob = recorder.getBlob()
+    let urlCreator = window.URL || window.webkitURL
+    let imageURL = urlCreator.createObjectURL(blob)
     const screen = document.getElementById("pantalla")
-    const stream = screen.srcObject;
-    const tracks = stream.getTracks();
-    tracks.forEach(function(track) {
-        track.stop()
+    screen.style.display= "none"
+    const previewImage = document.getElementById("preview-image")
+    previewImage.src = imageURL
+    previewImage.style.display = "block"
+         
+}
+
+function subirGifo (){
+    const botonSubir = document.getElementById("boton-subir")
+    botonSubir.style.display="none"
+    const botonFinalizar = document.getElementById("boton-finalizar")
+    botonFinalizar.style.display="none"
+    const dos = document.getElementById("dos")
+    dos.src=`${folder}/paso-a-paso2.svg`
+    const tres = document.getElementById("tres")
+    tres.src=`${folder}/paso-a-paso-hover3.svg`
+    const form = new FormData()
+    form.append("file", blob, "myGif.gif")
+    form.append("tags", "gif, person, funny")
+    const overlay = document.getElementById("purple-overlay")
+    overlay.style.display = "block"
+    const loading = document.getElementById("loading")
+    const loadingText = document.getElementById("loading-text")
+    loading.style.display = "block"
+    loadingText.style.display = "block"
+    fetch(`http://upload.giphy.com/v1/gifs?api_key=${apiKey}`, {
+        method: "POST",
+        body: form,
     })
-    screen.addEventListener("click", () => playVideo())
-    botonSubir.addEventListener("click", () => subirGifo())
+    .then(response =>response.json())
+    .then(response => guardarMiGifo(response.data.id))
 }
 
-const playVideo = () => {
-    const screen = document.getElementById("pantalla")
-    screen.play()
+const guardarMiGifo = (id) => {
+    const loading = document.getElementById("loading")
+    const loadingText = document.getElementById("loading-text")
+    loading.src=`${folder}/check.svg`
+    loadingText.innerText="Gifo subido con éxito"
+    url = `http://api.giphy.com/v1/gifs/${id}?api_key=${apiKey}`
+    fetch(url)
+    .then(response =>response.json())
+    .then(gif => addGifToMyList(gif.data))    
 }
 
-const subirGifo = () => {
-    console.log("Gifo subido")
+const addGifToMyList = (gif) => {
+    const myGifoList = JSON.parse(localStorage.getItem("myGifoList")) || []
+    localStorage.setItem("myGifoList", JSON.stringify(myGifoList.concat(gif)))
 }
+const renderMyGifos = () => {
+    const trending = document.getElementById("trending")
+    trending.style.display = "block"
+    const carrousel = document.getElementById('myGifos-carrousel')
+    carrousel.innerHTML = ''
+    const favouritesSection = document.getElementById("favorites-section")
+    favouritesSection.style.display="none"
+    const searchSection = document.getElementById("search-section")
+    searchSection.style.display = "none"
+    const createGifoSection = document.getElementById("crear-gifos")
+    createGifoSection.style.display = "none"
+    const myGifos = document.getElementById("myGifos-section")
+    myGifos.style.display = "flex"
+    
+    const myGifoList = JSON.parse(localStorage.getItem("myGifoList")) || []
+    if(myGifoList.length == 0 || window.localStorage.length == 0){
+        const emptyMyGifos = document.getElementById("empty-myGifos")
+        emptyMyGifos.style.display = "flex"
+        emptyMyGifos.innerHTML= ''
+       const emptyicon = document.createElement("p")
+       emptyicon.innerHTML = `<img src ="${folder}/icon-mis-gifos-sin-contenido.svg" alt="No hay gifos" class="empty-myGifos" />`
+       const emptyfaveMessage = document.createElement("p")
+       emptyfaveMessage.className="empty-message"
+       emptyfaveMessage.innerHTML="¡Anímate a crear tu primer GIFO!"
+       emptyMyGifos.appendChild(emptyicon)
+       emptyMyGifos.appendChild(emptyfaveMessage)
+    }else{
+        place ="myGifos-carrousel"
+        const arrayOfValues = JSON.parse(localStorage.getItem("myGifoList")) || []
+        console.log(arrayOfValues)
+        arrayOfValues.forEach(value => render(value, place)) 
+    }
+}
+
 
 const keyCheck = (event) => {
     const input = document.getElementById("searchInput")
@@ -462,6 +660,8 @@ const keyCheck = (event) => {
 }
 
 const clear = () => {
+    const myGifos = document.getElementById("myGifos-section")
+    myGifos.style.display = "none"
     const createGifoSection = document.getElementById("crear-gifos")
     createGifoSection.style.display = "none"
     const trendingHeader = document.getElementById('trending-topics-header')
@@ -480,7 +680,7 @@ const clearResults = (event) => {
     searchSuggestions.innerHTML = ''
     const input = document.getElementById("searchInput")
     input.value = ''
-    input.style.backgroundImage = "url('images/icon-search.svg')";
+    input.style.backgroundImage = `url('${folder}/icon-search.svg')`;
     const seeMore = document.getElementById('see-more-area')
     seeMore.innerHTML = ''
 }
@@ -494,6 +694,10 @@ const clearSeeMore = () => {
 }
 
 const showHome = () => {
+    const button = document.getElementById("crear")
+    button.src = `${folder}/button-crear-gifo.svg`
+    const myGifos = document.getElementById("myGifos-section")
+    myGifos.style.display = "none"
     const searchSection = document.getElementById("search-section")
     const searchResults = document.getElementById("search-results")
     const seeMoreArea = document.getElementById("see-more-area")
@@ -510,22 +714,38 @@ const showHome = () => {
     counter = 12
 }
 
+const darkmode = () => {
+    if(mode){
+        const cssLink = document.getElementById("estilos")
+        cssLink.href="styles/dist/stylesheet-dark.css"
+        mode = false;
+    }else{
+        lightmode()
+    }
+}
+
+const lightmode = () => {
+    console.log("light")
+}
+
 const facebook = document.getElementById("facebook");
 const twitter = document.getElementById("twitter");
 const instagram = document.getElementById("instagram");
 const favoritosLink = document.getElementById("favoritos-link")
 const createGifo = document.getElementById("boton-crear")
+const darkMode = document.getElementById("dark-mode")
 
 
 
-facebook.addEventListener("mouseover", () => facebook.src = "images/icon_facebook_hover.svg")
-facebook.addEventListener("mouseout", () => facebook.src = "images/icon_facebook.svg")
-twitter.addEventListener("mouseover", () => twitter.src = "images/icon-twitter-hover.svg")
-twitter.addEventListener("mouseout", () => twitter.src = "images/icon-twitter.svg")
-instagram.addEventListener("mouseover", () => instagram.src = "images/icon_instagram-hover.svg")
-instagram.addEventListener("mouseout", () => instagram.src = "images/icon_instagram.svg")
+facebook.addEventListener("mouseover", () => facebook.src = `${folder}/icon_facebook_hover.svg`)
+facebook.addEventListener("mouseout", () => facebook.src = `${folder}/icon_facebook.svg`)
+twitter.addEventListener("mouseover", () => twitter.src = `${folder}/icon-twitter-hover.svg`)
+twitter.addEventListener("mouseout", () => twitter.src = `${folder}/icon-twitter.svg`)
+instagram.addEventListener("mouseover", () => instagram.src = `${folder}/icon_instagram-hover.svg`)
+instagram.addEventListener("mouseout", () => instagram.src = `${folder}/icon_instagram.svg`)
 favoritosLink.addEventListener("click", () => renderFavourites())
 createGifo.addEventListener("click", () => pasoUno())
+darkMode.addEventListener("click", () =>darkmode())
 
 
 getTrendingGifs();

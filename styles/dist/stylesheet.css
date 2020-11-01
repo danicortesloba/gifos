@@ -8,6 +8,7 @@
 
 body, html {
   overflow-x: hidden;
+  background-color: white;
 }
 
 header {
@@ -456,6 +457,10 @@ footer {
   cursor: pointer;
 }
 
+.icons:hover {
+  display: block;
+}
+
 .crear-gifos {
   display: none;
   flex-direction: column;
@@ -471,6 +476,43 @@ footer {
   width: 688px;
   height: 390px;
   border: 1px solid #572EE5;
+  position: relative;
+}
+
+.cuadrado1 {
+  width: 25px;
+  height: 25px;
+  margin: 5px 5px 5px 5px;
+  position: absolute;
+  border-left: 2px solid #5ED7C6;
+  border-top: 2px solid #5ED7C6;
+}
+
+.cuadrado2 {
+  width: 25px;
+  height: 25px;
+  margin: 5px 5px 5px 650px;
+  position: absolute;
+  border-right: 2px solid #5ED7C6;
+  border-top: 2px solid #5ED7C6;
+}
+
+.cuadrado3 {
+  width: 25px;
+  height: 25px;
+  margin: 355px 5px 5px 5px;
+  position: absolute;
+  border-left: 2px solid #5ED7C6;
+  border-bottom: 2px solid #5ED7C6;
+}
+
+.cuadrado4 {
+  margin: 355px 5px 5px 650px;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  border-right: 2px solid #5ED7C6;
+  border-bottom: 2px solid #5ED7C6;
 }
 
 .camara {
@@ -494,6 +536,27 @@ footer {
 .linea {
   width: 795px;
   border-bottom: 3px solid #572EE5;
+}
+
+.footer-gifos2 {
+  display: grid;
+  width: 795px;
+  grid-template-columns: repeat(3, [col] auto);
+  grid-template-rows: repeat(1, [row] auto);
+  justify-content: space-between;
+  justify-items: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.contador {
+  cursor: pointer;
+  display: none;
+  color: #572EE5;
+  font-size: 15px;
+  font-family: "Montserrat";
+  font-weight: bold;
+  align-self: right;
 }
 
 .numeros {
@@ -537,6 +600,10 @@ footer {
   font-size: 16px;
 }
 
+.preview-image {
+  display: none;
+}
+
 .textos-pantalla {
   display: none;
   flex-direction: column;
@@ -567,6 +634,73 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.preview-image {
+  z-index: 0;
+  position: relative;
+}
+
+.purple-overlay {
+  background-color: #572EE5;
+  width: 430px;
+  height: 370px;
+  align-self: center;
+  z-index: 10;
+  position: absolute;
+  opacity: 0.6;
+  display: none;
+}
+
+.loading {
+  display: none;
+}
+
+.loading-text {
+  margin-top: 10px;
+  display: none;
+  color: white;
+  font-size: 15px;
+  font-family: "Montserrat";
+  font-weight: bold;
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+  position: absolute;
+}
+
+.myGifos-section {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  margin-top: 0px;
+}
+
+.myGifos-title {
+  color: #572EE5;
+  font-family: "Montserrat";
+  font-weight: bold;
+}
+
+.myGifos-carrousel {
+  display: grid;
+  grid-template-columns: repeat(2, [col] auto);
+  grid-template-rows: repeat(6, [row] auto);
+  justify-content: space-around;
+  align-content: space-around;
+}
+
+.empty-myGifos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  margin-top: 70px;
 }
 
 @media (min-width: 835px) {
@@ -641,6 +775,10 @@ footer {
 
   .pop-up-image {
     width: 30%;
+  }
+
+  .trending-y:hover > .icons {
+    display: flex;
   }
 }
 @media (min-width: 1152px) {
