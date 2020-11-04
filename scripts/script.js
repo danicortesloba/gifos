@@ -7,8 +7,7 @@ let recorder
 let blob
 let countdown
 let folder ="images"
-let mode = true;
-
+let mode = true
 
 const seemoreArea = document.getElementById('see-more-area')
 seemoreArea.innerHTML = ""
@@ -21,7 +20,7 @@ myGifos.style.display = "none"
 const favoritesSection = document.getElementById("favorites-section")
 favoritesSection.style.display = "none"
 const button = document.getElementById("crear")
-button.src = `${folder}/button-crear-gifo.svg`
+button.src = `${folder}/CTA-crear-gifo.svg`
 const contar = document.getElementById("contador")
 contar.addEventListener("click", pasoDos)
 const botonGrabar = document.getElementById("boton-grabar")
@@ -30,8 +29,9 @@ const botonFinalizar = document.getElementById("boton-finalizar")
 botonFinalizar.addEventListener("click", () => finalizar())
 const botonSubir = document.getElementById("boton-subir")
 botonSubir.addEventListener("click", () => subirGifo()) 
-
 const input = document.getElementById("searchInput")
+input.addEventListener("click", () => counter = 12)
+
 if(input.value.length !== 0){
     input.addEventListener("click", () => search())
 }else{
@@ -48,7 +48,7 @@ const hoverCreate = () => {
 
 const offCreate = () =>{
     const image = document.getElementById("crear")
-    image.src=`${folder}/button-crear-gifo.svg`    
+    image.src=`${folder}/CTA-crear-gifo.svg`    
 }
 
 const leftHover = () => {
@@ -296,6 +296,7 @@ const seeMore = () => {
 const getSearchSuggestions = () => {
     clear()
     const searchSuggestions = document.getElementById("search-suggestions")
+    searchSuggestions.addEventListener("click", () => counter = 12)
     const input = document.getElementById("searchInput")
     const query = input.value
     url= `https://api.giphy.com/v1/gifs/search/tags?api_key=${apiKey}&q=${query}&limit=5`
@@ -642,7 +643,7 @@ const renderMyGifos = () => {
 
 const keyCheck = (event) => {
     const input = document.getElementById("searchInput")
-    input.style.backgroundImage = "url('images/close.svg')";
+    input.style.backgroundImage = `url('${folder}/close.svg')`;
 
     if(event.keyCode == 8 || event.keyCode == 46){
         const searchResults = document.getElementById("search-results")
@@ -695,7 +696,7 @@ const clearSeeMore = () => {
 
 const showHome = () => {
     const button = document.getElementById("crear")
-    button.src = `${folder}/button-crear-gifo.svg`
+    button.src = `${folder}/CTA-crear-gifo.svg`
     const myGifos = document.getElementById("myGifos-section")
     myGifos.style.display = "none"
     const searchSection = document.getElementById("search-section")
@@ -710,25 +711,64 @@ const showHome = () => {
     favouritesSection.style.display = "none"
     const createGifoSection = document.getElementById("crear-gifos")
     createGifoSection.style.display = "none"
-    getTrendingTerms()
     counter = 12
 }
 
 const darkmode = () => {
+    const head = document.getElementById("head")
+    const crearPic = document.getElementById("crear")
+    const camaraPic = document.getElementById("camara")
+    const luzPic = document.getElementById("luz-camara")
+    const cintaPic = document.getElementById("cinta")
+    const paso1Pic = document.getElementById("uno")
+    const paso2Pic = document.getElementById("dos")
+    const paso3Pic = document.getElementById("tres")
+    const leftPic = document.getElementById("left")
+    const rightPic = document.getElementById("right")
     if(mode){
-        const cssLink = document.getElementById("estilos")
-        cssLink.href="styles/dist/stylesheet-dark.css"
+        const cssLink = document.createElement("link")
+        cssLink.href="styles/stylesheet-dark.css"
+        cssLink.rel="stylesheet"
+        cssLink.type="text/css"
+        cssLink.id="cssLink"
+        head.appendChild(cssLink)
+        const modeLink = document.getElementById("dark-mode")
+        modeLink.innerText="Modo Diurno"
+        folder = "images-dark"
         mode = false;
+        window.location.reload
+        crearPic.src = "images-dark/CTA-crear-gifo.svg"
+        camaraPic.src="images-dark/camara.svg"
+        luzPic.src="images-dark/element-luz-camara.svg"
+        cintaPic.src="images-dark/pelicula.svg"
+        paso1Pic.src="images-dark/paso-a-paso1.svg"
+        paso2Pic.src="images-dark/paso-a-paso2.svg"
+        paso3Pic.src="images-dark/paso-a-paso3.svg"
+        leftPic.src="images-dark/button-slider-left.svg"
+        rightPic.src="images-dark/button-slider-right.svg"
+        
+        
     }else{
-        lightmode()
+        const ccsLink = document.getElementById("cssLink")
+        head.removeChild(cssLink)
+        const modeLink = document.getElementById("dark-mode")
+        modeLink.innerText="Modo Nocturno"
+        crearPic.src = "images/CTA-crear-gifo.svg"
+        camaraPic.src="images/camara.svg"
+        luzPic.src="images/element-luz-camara.svg"
+        cintaPic.src="images/pelicula.svg"
+        paso1Pic.src="images/paso-a-paso1.svg"
+        paso2Pic.src="images/paso-a-paso2.svg"
+        paso3Pic.src="images/paso-a-paso3.svg"
+        leftPic.src="images/button-slider-left.svg"
+        rightPic.src="images/button-slider-right.svg"
+        folder ="images"
+        mode = true
+        window.location.reload
     }
 }
 
-const lightmode = () => {
-    const cssLink = document.getElementById("estilos")
-    cssLink.href="styles/dist/stylesheet.css"
-    mode = true
-}
+
 
 const facebook = document.getElementById("facebook");
 const twitter = document.getElementById("twitter");
@@ -736,6 +776,12 @@ const instagram = document.getElementById("instagram");
 const favoritosLink = document.getElementById("favoritos-link")
 const createGifo = document.getElementById("boton-crear")
 const darkMode = document.getElementById("dark-mode")
+const logo = document.getElementById("logo")
+const favoritesLink = document.getElementById("favoritos-link")
+const myGifosLink = document.getElementById("myGifos-link")
+const crearLink = document.getElementById("crear")
+const leftButton = document.getElementById("left")
+const rightButton = document.getElementById("right")
 
 
 
@@ -748,6 +794,20 @@ instagram.addEventListener("mouseout", () => instagram.src = `${folder}/icon_ins
 favoritosLink.addEventListener("click", () => renderFavourites())
 createGifo.addEventListener("click", () => pasoUno())
 darkMode.addEventListener("click", () =>darkmode())
+logo.addEventListener("click", () => showHome())
+favoritesLink.addEventListener("click", () => renderFavourites())
+myGifosLink.addEventListener("click", () => renderMyGifos())
+crearLink.addEventListener("mouseover", () => hoverCreate())
+crearLink.addEventListener("mouseout", () => offCreate())
+crearLink.addEventListener("click", () => crearGifo())
+leftButton.addEventListener("mouseover", () => leftHover())
+leftButton.addEventListener("mouseout", () => leftOff())
+leftButton.addEventListener("click", ()=> carrouselLeft())
+rightButton.addEventListener("mouseover", () => rightHover())
+rightButton.addEventListener("mouseout", () => rightOff())
+rightButton.addEventListener("click", ()=> carrouselRight())
+
+
 
 
 getTrendingGifs();

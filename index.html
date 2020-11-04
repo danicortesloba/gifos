@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head id="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gifos</title>
@@ -9,15 +9,15 @@
 </head>
 <body>
     <header class="header">
-        <img src="images/logo-mobile.svg"  class="logo" alt="logo" onclick="showHome()"/>
+        <img src="images/logo-mobile.svg"  class="logo" alt="logo"  id="logo"/>
         <input class="menu-btn" type="checkbox" id="menu-btn" />
         <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
         <nav class="menu">
             <ul class="menu-ul">
-                <li><a href="" id="dark-mode">Modo Nocturno</a></li>
-                <li><a href="" id="favoritos-link" onclick="renderFavourites()">Favoritos</a></li>
-                <li><a href="" id="myGifos-link" onclick="renderMyGifos()">Mis Gifos</a></li>
-                <img src="images/button-crear-gifo.svg" alt="Create Gifo" class="crear" id="crear" onmouseover="hoverCreate()" onmouseout="offCreate()" onclick="crearGifo()"/>
+                <li><a href="#" id="dark-mode">Modo Nocturno</a></li>
+                <li><a href="#" id="favoritos-link">Favoritos</a></li>
+                <li><a href="#" id="myGifos-link">Mis Gifos</a></li>
+                <img src="images/CTA-crear-gifo.svg" alt="Create Gifo" class="crear" id="crear"/>
 
             </ul>
         </nav>
@@ -46,18 +46,14 @@
         <section class="crear-gifos" id="crear-gifos">
             <div class="crear-gifos1">
                 <div class="camara">
-                    <img src="images/camara.svg" alt="camara"/>
-                    <img src="images/element-luz-camara.svg" alt="luz camara"/>
+                    <img src="images/camara.svg" alt="camara" id="camara"/>
+                    <img src="images/element-luz-camara.svg" alt="luz camara" id="luz-camara"/>
                 </div>
                 <div class="cuadrado-pantalla">
-                    <div class = "cuadrado1"></div>
-                    <div class = "cuadrado2"></div>
-                    <div class = "cuadrado3"></div>
-                    <div class = "cuadrado4"></div>
                     <div class="textos-pantalla" id="textos-pantalla">
                         <p class="paso-cero-heading"> Aquí podrás crear tus propios <span class="paso-cero-word">GIFOS</span></p>
                         <p class="paso-cero-text">¡Crea tu Gifo en sólo tres pasos!</p>
-                        <p class="paso-cero-text">(sólo necesitas una cámara para grabar un video</p>
+                        <p class="paso-cero-text">(sólo necesitas una cámara para grabar un video)</p>
                     </div>
                     <div class="textos-pantalla-2" id="textos-pantalla-2">
                         <p class="paso-cero-heading">¿Nos das acceso a tu cámara?</p>
@@ -75,7 +71,7 @@
                     </div>
                     
                 </div>
-                <img src="images/pelicula.svg" alt="cinta" class="cinta"/>
+                <img src="images/pelicula.svg" alt="cinta" class="cinta" id="cinta"/>
             </div>
             <div class="crear-gifos2" id="crear-gifos2">
                 <div class="footer-gifos2">
@@ -105,9 +101,9 @@
             <p class="trending-gifs-header">Trending GIFOs</p>
             <p class="trending-gifs-text">Mira los últimos GIFOS de nuestra comunidad</p>
             <div class="trending-wrapper">
-                <img src="images/button-slider-left.svg" onclick="carrouselLeft()" onmouseover="leftHover()" onmouseout="leftOff()" id="left" class="left" />
+                <img src="images/button-slider-left.svg" id="left" class="left" />
                 <div id="trending-carrousel" class="trending-carrousel"></div>
-                <img src="images/button-slider-right.svg" id="right" class="right" onclick="carrouselRight()" onmouseover="rightHover()" onmouseout="rightOff()"/>
+                <img src="images/button-slider-right.svg" id="right" class="right"/>
             </div>    
         </section>
        

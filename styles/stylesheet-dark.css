@@ -1,0 +1,150 @@
+body, html {
+  background-color: #37383C;
+}
+
+header nav ul li {
+  color: white;
+  background-color: black;
+}
+
+header nav ul li a {
+  color: white;
+  border-bottom: 1px white solid;
+}
+
+
+.nav-icon {
+  background: white;
+}
+
+.nav-icon:before, .nav-icon:after {
+  background: white;
+}
+
+.menu-btn:checked ~ .menu .menu-ul {
+  background-color: #000000;
+}
+
+
+h1 {
+  color: white;
+}
+
+.gifos {
+  color: #5ED7C6;
+}
+
+.search {
+  border: 1px white solid;
+  background: url(../../images-dark/icon-search.svg) no-repeat right 10px center;
+}
+
+.trending-topics-header {
+  color: white;
+}
+
+.trending-topics {
+  color: white;
+}
+
+.trending {
+  background-color: #222326;
+}
+
+.trending-gifs-header {
+  color: white;
+}
+
+.trending-gifs-text {
+  color: white;
+}
+
+
+.search-suggestions {
+  color: #9CAFC3;
+}
+
+
+.no-results-title {
+  color: white;
+}
+
+.no-results-text {
+  color: #5ED7C6;
+}
+
+.search {
+  color: white;
+}
+
+.redes {
+  color: white
+}
+
+.copyright{
+  color: white
+}
+
+.favoritos-title {
+  color: white;
+}
+
+.empty-message {
+  color: #5ED7C6;
+}
+
+.cuadrado-pantalla {
+  border: 1px solid #572EE5;
+}
+
+.linea {
+  border-bottom: 3px solid #572EE5;
+}
+
+.contador {
+  color: white
+}
+.boton-crear {
+  color: white;
+  border: 1px solid white;
+  background-color: #37383C;
+}
+
+.boton-crear:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.paso-cero-heading {
+  color: #572EE5;
+}
+
+.paso-cero-word {
+  color: #5ED7C6;
+}
+
+.paso-cero-text {
+  color: white;
+  font-family: "Roboto";
+  font-size: 16px;
+}
+
+.myGifos-title {
+  color: white;
+}
+
+
+
+@media (min-width: 835px) {
+  .menu-btn:checked ~ .menu .menu-ul {
+    background-color: #37383C;
+  }
+
+  .header nav ul li {
+    background-color: #37383C;
+  }
+  .menu-ul li a {
+    color: white;
+  }
+}

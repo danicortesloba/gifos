@@ -21,7 +21,7 @@ myGifos.style.display = "none";
 var favoritesSection = document.getElementById("favorites-section");
 favoritesSection.style.display = "none";
 var button = document.getElementById("crear");
-button.src = "".concat(folder, "/button-crear-gifo.svg");
+button.src = "".concat(folder, "/CTA-crear-gifo.svg");
 var contar = document.getElementById("contador");
 contar.addEventListener("click", pasoDos);
 var botonGrabar = document.getElementById("boton-grabar");
@@ -37,6 +37,9 @@ botonSubir.addEventListener("click", function () {
   return subirGifo();
 });
 var input = document.getElementById("searchInput");
+input.addEventListener("click", function () {
+  return counter = 12;
+});
 
 if (input.value.length !== 0) {
   input.addEventListener("click", function () {
@@ -60,7 +63,7 @@ var hoverCreate = function hoverCreate() {
 
 var offCreate = function offCreate() {
   var image = document.getElementById("crear");
-  image.src = "".concat(folder, "/button-crear-gifo.svg");
+  image.src = "".concat(folder, "/CTA-crear-gifo.svg");
 };
 
 var leftHover = function leftHover() {
@@ -365,6 +368,9 @@ var seeMore = function seeMore() {
 var getSearchSuggestions = function getSearchSuggestions() {
   clear();
   var searchSuggestions = document.getElementById("search-suggestions");
+  searchSuggestions.addEventListener("click", function () {
+    return counter = 12;
+  });
   var input = document.getElementById("searchInput");
   var query = input.value;
   url = "https://api.giphy.com/v1/gifs/search/tags?api_key=".concat(apiKey, "&q=").concat(query, "&limit=5");
@@ -753,7 +759,7 @@ var renderMyGifos = function renderMyGifos() {
 
 var keyCheck = function keyCheck(event) {
   var input = document.getElementById("searchInput");
-  input.style.backgroundImage = "url('images/close.svg')";
+  input.style.backgroundImage = `url('${folder}/close.svg')`;
 
   if (event.keyCode == 8 || event.keyCode == 46) {
     var searchResults = document.getElementById("search-results");
@@ -807,7 +813,7 @@ var clearSeeMore = function clearSeeMore() {
 
 var showHome = function showHome() {
   var button = document.getElementById("crear");
-  button.src = "".concat(folder, "/button-crear-gifo.svg");
+  button.src = "".concat(folder, "/CTA-crear-gifo.svg");
   var myGifos = document.getElementById("myGifos-section");
   myGifos.style.display = "none";
   var searchSection = document.getElementById("search-section");
@@ -827,19 +833,59 @@ var showHome = function showHome() {
 };
 
 var darkmode = function darkmode() {
-  if (mode) {
-    var cssLink = document.getElementById("estilos");
-    cssLink.href = "styles/dist/stylesheet-dark.css";
-    mode = false;
-  } else {
-    lightmode();
-  }
-};
+  var head = document.getElementById("head");
+  var crearPic = document.getElementById("crear");
+  var camaraPic = document.getElementById("camara");
+  var luzPic = document.getElementById("luz-camara");
+  var cintaPic = document.getElementById("cinta");
+  var paso1Pic = document.getElementById("uno");
+  var paso2Pic = document.getElementById("dos");
+  var paso3Pic = document.getElementById("tres");
+  var leftPic = document.getElementById("left");
+  var rightPic = document.getElementById("right");
 
-var lightmode = function lightmode() {
-  var cssLink = document.getElementById("estilos");
-  cssLink.href = "styles/dist/stylesheet.css";
-  mode = true;
+  if (mode) {
+    var _cssLink = document.createElement("link");
+
+    _cssLink.href = "styles/stylesheet-dark.css";
+    _cssLink.rel = "stylesheet";
+    _cssLink.type = "text/css";
+    _cssLink.id = "cssLink";
+    head.appendChild(_cssLink);
+    var modeLink = document.getElementById("dark-mode");
+    modeLink.innerText = "Modo Diurno";
+    folder = "images-dark";
+    mode = false;
+    window.location.reload;
+    crearPic.src = "images-dark/CTA-crear-gifo.svg";
+    camaraPic.src = "images-dark/camara.svg";
+    luzPic.src = "images-dark/element-luz-camara.svg";
+    cintaPic.src = "images-dark/pelicula.svg";
+    paso1Pic.src = "images-dark/paso-a-paso1.svg";
+    paso2Pic.src = "images-dark/paso-a-paso2.svg";
+    paso3Pic.src = "images-dark/paso-a-paso3.svg";
+    leftPic.src = "images-dark/button-slider-left.svg";
+    rightPic.src = "images-dark/button-slider-right.svg";
+  } else {
+    var ccsLink = document.getElementById("cssLink");
+    head.removeChild(cssLink);
+
+    var _modeLink = document.getElementById("dark-mode");
+
+    _modeLink.innerText = "Modo Nocturno";
+    crearPic.src = "images/CTA-crear-gifo.svg";
+    camaraPic.src = "images/camara.svg";
+    luzPic.src = "images/element-luz-camara.svg";
+    cintaPic.src = "images/pelicula.svg";
+    paso1Pic.src = "images/paso-a-paso1.svg";
+    paso2Pic.src = "images/paso-a-paso2.svg";
+    paso3Pic.src = "images/paso-a-paso3.svg";
+    leftPic.src = "images/button-slider-left.svg";
+    rightPic.src = "images/button-slider-right.svg";
+    folder = "images";
+    mode = true;
+    window.location.reload;
+  }
 };
 
 var facebook = document.getElementById("facebook");
@@ -848,6 +894,12 @@ var instagram = document.getElementById("instagram");
 var favoritosLink = document.getElementById("favoritos-link");
 var createGifo = document.getElementById("boton-crear");
 var darkMode = document.getElementById("dark-mode");
+var logo = document.getElementById("logo");
+var favoritesLink = document.getElementById("favoritos-link");
+var myGifosLink = document.getElementById("myGifos-link");
+var crearLink = document.getElementById("crear");
+var leftButton = document.getElementById("left");
+var rightButton = document.getElementById("right");
 facebook.addEventListener("mouseover", function () {
   return facebook.src = "".concat(folder, "/icon_facebook_hover.svg");
 });
@@ -874,6 +926,42 @@ createGifo.addEventListener("click", function () {
 });
 darkMode.addEventListener("click", function () {
   return darkmode();
+});
+logo.addEventListener("click", function () {
+  return showHome();
+});
+favoritesLink.addEventListener("click", function () {
+  return renderFavourites();
+});
+myGifosLink.addEventListener("click", function () {
+  return renderMyGifos();
+});
+crearLink.addEventListener("mouseover", function () {
+  return hoverCreate();
+});
+crearLink.addEventListener("mouseout", function () {
+  return offCreate();
+});
+crearLink.addEventListener("click", function () {
+  return crearGifo();
+});
+leftButton.addEventListener("mouseover", function () {
+  return leftHover();
+});
+leftButton.addEventListener("mouseout", function () {
+  return leftOff();
+});
+leftButton.addEventListener("click", function () {
+  return carrouselLeft();
+});
+rightButton.addEventListener("mouseover", function () {
+  return rightHover();
+});
+rightButton.addEventListener("mouseout", function () {
+  return rightOff();
+});
+rightButton.addEventListener("click", function () {
+  return carrouselRight();
 });
 getTrendingGifs();
 getTrendingTerms();

@@ -1,112 +1,51 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;600&display=swap");
-* {
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
-}
-
 body, html {
-  overflow-x: hidden;
   background-color: #37383C;
 }
 
-header {
-  height: 300px;
-}
 header nav ul {
-  list-style: none;
-  overflow: hidden;
+  background-color: #37383C;
 }
 header nav ul li {
-  font-family: "Montserrat";
-  font-weight: bold;
-  font-size: 16px;
-  padding: 6px;
   color: white;
   background-color: black;
-  text-align: center;
-  margin: 20px 10px 20px 10px;
 }
 header nav ul li a {
   color: white;
-  text-decoration: none;
   border-bottom: 1px white solid;
-  padding: 10px 0px 10px 0px;
-}
-
-.logo {
-  margin: 20px;
-  width: 49px;
+  background: #37383C;
 }
 
 .menu-ul {
-  clear: both;
-  max-height: 0;
-  transition: max-height 0.2s ease-out;
+  background-color: #37383C;
 }
 
 .menu-icon {
-  margin: 15px;
-  float: right;
-  cursor: pointer;
-  position: relative;
-  user-select: none;
+  background: #37383C;
 }
 
 .nav-icon {
-  background: white;
-  display: block;
-  height: 2px;
-  position: relative;
-  transition: background 0.3s ease-out;
-  width: 18px;
+  background: #37383C;
 }
 
 .nav-icon:before, .nav-icon:after {
   background: white;
-  content: "";
-  display: inline-block;
-  height: 100%;
-  position: absolute;
-  transition: all 0.3s ease-out;
-  width: 100%;
 }
 
 .nav-icon:before {
-  top: 5px;
+  background: white;
 }
 
 .nav-icon:after {
-  top: -5px;
-}
-
-.menu-btn {
-  display: none;
+  background: white;
 }
 
 .menu-btn:checked ~ .menu .menu-ul {
   max-height: 240px;
-  background-color: #572EE5;
-}
-
-.menu-btn:checked ~ .menu-icon .nav-icon {
-  background: transparent;
-}
-
-.menu-btn:checked ~ .menu-icon .nav-icon:before {
-  transform: rotate(-45deg);
-  top: 0;
-}
-
-.menu-btn:checked ~ .menu-icon .nav-icon:after {
-  transform: rotate(45deg);
-  top: 0;
+  background-color: black;
 }
 
 .crear {
-  margin: 10px 10px 10px 10px;
-  display: none;
+  background: #572EE5;
 }
 
 .search-section {
@@ -116,7 +55,7 @@ header nav ul li a {
 }
 
 h1 {
-  color: #572EE5;
+  color: white;
   text-align: center;
   font-family: "Montserrat";
   font-weight: bold;
@@ -131,7 +70,7 @@ h1 {
   background: url(../../images/icon-search.svg) no-repeat right 10px center;
   width: 300px;
   border-radius: 15px;
-  border: 1px #572EE5 solid;
+  border: 1px white solid;
   height: 50px;
 }
 
@@ -145,7 +84,7 @@ h1 {
 }
 
 .trending-topics {
-  color: #572EE5;
+  color: white;
   font-family: "Montserrat";
   font-weight: bold;
   font-size: 16px;
@@ -160,7 +99,7 @@ h1 {
 }
 
 .trending-gifs-header {
-  color: #572EE5;
+  color: white;
   font-family: "Montserrat";
   font-weight: bold;
   font-size: 20px;
@@ -170,7 +109,7 @@ h1 {
 }
 
 .trending-gifs-text {
-  color: #000000;
+  color: white;
   font-family: "Roboto";
   font-weight: bold;
   font-size: 16px;
@@ -705,13 +644,14 @@ footer {
 
 @media (min-width: 835px) {
   .header nav ul li {
-    background-color: white;
+    background-color: #37383C;
     float: left;
   }
 
   .menu-ul li a {
-    color: #572EE5;
+    color: white;
     border: none;
+    background-color: #37383C;
   }
 
   .menu-icon {
@@ -722,10 +662,12 @@ footer {
     clear: none;
     float: right;
     max-height: none;
+    background-color: #37383C;
   }
 
   .menu-ul {
     max-height: none;
+    background-color: #37383C;
   }
 
   .crear {
