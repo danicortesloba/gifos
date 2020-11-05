@@ -128,7 +128,7 @@ h1 {
 }
 
 .search {
-  background: url(../../images/icon-search.svg) no-repeat right 10px center;
+  background: url(../images/icon-search.svg) no-repeat right 10px center;
   width: 300px;
   border-radius: 15px;
   border: 1px #572EE5 solid;
