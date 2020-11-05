@@ -480,7 +480,7 @@ const pasoUno = () => {
         stream = mediaStream
      })
 
-     .then(pasoDos()) 
+     .then(setTimeout(function(){ pasoDos()}, 4000)) 
 }
 
 function pasoDos (){
@@ -493,10 +493,10 @@ function pasoDos (){
     uno.src=`${folder}/paso-a-paso1.svg`
     const dos = document.getElementById("dos")
     dos.src=`${folder}/paso-a-paso-hover2.svg`
-    const screenTexts2 = document.getElementById("textos-pantalla-2")
-    screenTexts2.style.display="none"
     const botonSubir = document.getElementById("boton-subir")
     botonSubir.style.display="none"
+    const screenTexts2 = document.getElementById("textos-pantalla-2")
+    screenTexts2.style.display="none"
     const screen = document.getElementById("pantalla")
     screen.style.display="block"
   
