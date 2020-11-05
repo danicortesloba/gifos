@@ -584,7 +584,7 @@ function subirGifo (){
     const loadingText = document.getElementById("loading-text")
     loading.style.display = "block"
     loadingText.style.display = "block"
-    fetch(`http://upload.giphy.com/v1/gifs?api_key=${apiKey}`, {
+    fetch(`https://upload.giphy.com/v1/gifs?api_key=${apiKey}`, {
         method: "POST",
         body: form,
     })
@@ -597,7 +597,7 @@ const guardarMiGifo = (id) => {
     const loadingText = document.getElementById("loading-text")
     loading.src=`${folder}/check.svg`
     loadingText.innerText="Gifo subido con éxito"
-    url = `http://api.giphy.com/v1/gifs/${id}?api_key=${apiKey}`
+    url = `https://api.giphy.com/v1/gifs/${id}?api_key=${apiKey}`
     fetch(url)
     .then(response =>response.json())
     .then(gif => addGifToMyList(gif.data))    
