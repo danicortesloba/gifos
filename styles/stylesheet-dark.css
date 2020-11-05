@@ -36,7 +36,7 @@ h1 {
 
 .search {
   border: 1px white solid;
-  background: url(../../images-dark/icon-search.svg) no-repeat right 10px center;
+  background: url(../images-dark/icon-search.svg) no-repeat right 10px center;
 }
 
 .trending-topics-header {
