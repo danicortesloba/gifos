@@ -164,6 +164,7 @@ const renderNoResults = () => {
     div.appendChild(p2)
     div.appendChild(p3)
 }
+
 const render = (gif, place) => {
     return new Promise((resolve, reject) => {
         const currentSection = document.getElementById(`${place}`)
