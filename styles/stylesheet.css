@@ -794,7 +794,7 @@ footer {
     margin-top: -277px;
   }
 }
-@media (max-width: 320px) {
+@media (max-width: 483px) {
   .illustration {
     width: 85vw;
   }
