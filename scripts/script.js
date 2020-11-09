@@ -552,7 +552,6 @@ function finalizar(){
     counter.innerHTML = "REPETIR CAPTURA"
     const botonFinalizar = document.getElementById("boton-finalizar")
     botonFinalizar.style.display="none"
-   
     botonSubir.style.display="block"
     recorder.stopRecording()
     blob = recorder.getBlob()
@@ -567,6 +566,9 @@ function finalizar(){
 }
 
 function subirGifo (){
+    stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
     const botonSubir = document.getElementById("boton-subir")
     botonSubir.style.display="none"
     const botonFinalizar = document.getElementById("boton-finalizar")
@@ -593,17 +595,35 @@ function subirGifo (){
 }
 
 const guardarMiGifo = (id) => {
+    const loader = document.getElementById("loader")
     const loading = document.getElementById("loading")
     const loadingText = document.getElementById("loading-text")
     loading.src=`${folder}/check.svg`
     loadingText.innerText="Gifo subido con éxito"
+    const container = document.createElement("div")
+    container.className="iconContainer"
+    const download = document.createElement("img")
+    download.src=`${folder}/icon-download-hover.svg` 
+    download.alt="download" 
+    download.className="downloadMyGifo"
+    const link = document.createElement("a")
+    const linkImg = document.createElement("img")
+    link.appendChild(linkImg)
+    linkImg.src = `${folder}/icon-link-hover.svg`
+    linkImg.alt="link"
+    loader.appendChild(container)
+    container.appendChild(download)
+    container.appendChild(link)
     url = `https://api.giphy.com/v1/gifs/${id}?api_key=${apiKey}`
     fetch(url)
     .then(response =>response.json())
-    .then(gif => addGifToMyList(gif.data))    
+    .then(gif => addGifToMyList(gif.data, download, link))
+    .then(setTimeout(function(){ container.style.display="none"}, 10000))    
 }
 
-const addGifToMyList = (gif) => {
+const addGifToMyList = (gif, download, link) => {
+    link.href = gif.url
+    download.addEventListener("click",() => downloadImage(gif))
     const myGifoList = JSON.parse(localStorage.getItem("myGifoList")) || []
     localStorage.setItem("myGifoList", JSON.stringify(myGifoList.concat(gif)))
 }

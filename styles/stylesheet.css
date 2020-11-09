@@ -651,6 +651,7 @@ footer {
   font-size: 15px;
   font-family: "Montserrat";
   font-weight: bold;
+  text-align: center;
 }
 
 .loader {
@@ -659,6 +660,13 @@ footer {
   z-index: 15;
   position: absolute;
 }
+  .iconContainer{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin-top: -220px;
+    margin-left: 300px;
+  }
 
 .myGifos-section {
   display: none;
@@ -788,10 +796,32 @@ footer {
 }
 @media (max-width: 320px) {
   .illustration {
-    width: 250px;
+    width: 85vw;
   }
 
   .search {
-    width: 250px;
+    width: 80vw;
+  }
+
+  .trending-topics {
+    width: 90vw;
+  }
+
+  .searched-gif {
+    width: 40vw;
+  }
+  .search-suggestions {
+    width: 80vw;
+  }
+
+  .search-section {
+    width: 90vw
+  }
+
+  .overlay {
+    width: 40vw;
+  }
+  .trending-gif {
+    width: 40vw;
   }
 }
